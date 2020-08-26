@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("client")
+@RequestMapping("clients")
 public class ClientController {
     private final ClientRepo clientRepo;
 
@@ -17,13 +17,13 @@ public class ClientController {
         this.clientRepo = clientRepo;
     }
 
-    @GetMapping
-    public List<Client> list() {
+    @GetMapping("getClients")
+    public List<Client> getClients() {
         return clientRepo.findAll();
     }
 
-    @PostMapping
-    public Client create(@RequestBody Client client) {
+    @PostMapping("addClient")
+    public Client addClient(@RequestBody Client client) {
         return clientRepo.save(client);
     }
 }
