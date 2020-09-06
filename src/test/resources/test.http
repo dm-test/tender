@@ -6,7 +6,7 @@ POST http://localhost:8080/clients/addClient
 Content-Type: application/json
 
 {
-  "name": "Bob"
+  "clientName": "Тарская ЦРБ"
 }
 
 ###
@@ -17,6 +17,19 @@ POST http://localhost:8080/products/addProduct
 Content-Type: application/json
 
 {
-  "name": "Диаскинтест",
-  "manufacturer": "ООО Биосинтез"
+  "productName": "Диаскинтест",
+  "manufacturer": "ООО Биосинтез",
+  "country": "Россия"
+}
+
+###
+GET http://localhost:8080/tenders/getTenders
+
+###
+POST http://localhost:8080/tenders/addTender
+Content-Type: application/json
+
+{
+  "tenderNumber": "123",
+  "clientName": "Тарская ЦРБ"
 }

@@ -2,36 +2,34 @@ package com.github.dmtest.tender.domain;
 
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@ToString(of = {"productName", "manufacturer", "country"})
 @Entity
-@ToString(of = {"name", "manufacturer", "country"})
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String name;
+    private Long productId;
+    private String productName;
     private String manufacturer;
     private String country;
 
     protected Product() {
     }
 
-    public Product(String name, String manufacturer, String country) {
-        this.name = name;
+    public Product(String productName, String manufacturer, String country) {
+        this.productName = productName;
         this.manufacturer = manufacturer;
         this.country = country;
     }
 
-    public Long getId() {
-        return id;
+    public Long getProductId() {
+        return productId;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
     public String getManufacturer() {
