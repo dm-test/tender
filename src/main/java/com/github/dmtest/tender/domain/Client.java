@@ -1,12 +1,12 @@
 package com.github.dmtest.tender.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.ToString;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@ToString(of = {"clientName"})
+@Getter
 @Entity
 @Table(name = "clients")
 public class Client {
@@ -27,15 +27,4 @@ public class Client {
         this.clientName = clientName;
     }
 
-    public Long getClientId() {
-        return clientId;
-    }
-
-    public String getClientName() {
-        return clientName;
-    }
-
-    public Set<Tender> getTenders() {
-        return tenders;
-    }
 }

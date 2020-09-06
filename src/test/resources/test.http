@@ -31,5 +31,6 @@ Content-Type: application/json
 
 {
   "tenderNumber": "123",
+  "tenderDate": "01.10.2020",
   "clientName": "Тарская ЦРБ"
 }

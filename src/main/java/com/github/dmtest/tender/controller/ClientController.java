@@ -2,6 +2,7 @@ package com.github.dmtest.tender.controller;
 
 import com.github.dmtest.tender.domain.Client;
 import com.github.dmtest.tender.dto.rq.ClientRqDto;
+import com.github.dmtest.tender.dto.rs.ClientRsDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.repo.ClientsRepo;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("clients")
@@ -24,8 +26,10 @@ public class ClientController {
     }
 
     @GetMapping("getClients")
-    public List<Client> getClients() {
-        List<Client> clients = clientsRepo.findAll();
+    public List<ClientRsDto> getClients() {
+        List<ClientRsDto> clients = clientsRepo.findAll().stream()
+                .map(client -> new ClientRsDto(client.getClientName()))
+                .collect(Collectors.toList());
         LOG.info("Получен список клиентов");
         return clients;
     }

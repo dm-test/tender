@@ -3,6 +3,7 @@ package com.github.dmtest.tender.controller;
 import com.github.dmtest.tender.domain.Product;
 import com.github.dmtest.tender.dto.rq.ProductRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
+import com.github.dmtest.tender.dto.rs.ProductRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.repo.ProductsRepo;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("products")
@@ -24,8 +26,10 @@ public class ProductController {
     }
 
     @GetMapping("getProducts")
-    public List<Product> getProducts() {
-        List<Product> products = productsRepo.findAll();
+    public List<ProductRsDto> getProducts() {
+        List<ProductRsDto> products = productsRepo.findAll().stream()
+                .map(pr -> new ProductRsDto(pr.getProductName(), pr.getManufacturer(), pr.getCountry()))
+                .collect(Collectors.toList());
         LOG.info("Получен список продуктов");
         return products;
     }

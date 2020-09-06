@@ -1,11 +1,12 @@
 package com.github.dmtest.tender.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.ToString;
+import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
-@ToString(of = {"tenderNumber"})
+@Getter
 @Entity
 @Table(name = "tenders")
 public class Tender {
@@ -15,6 +16,8 @@ public class Tender {
 
     private String tenderNumber;
 
+    private LocalDate tenderDate;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
     @JsonBackReference
@@ -23,20 +26,9 @@ public class Tender {
     protected Tender() {
     }
 
-    public Tender(String tenderNumber, Client client) {
+    public Tender(String tenderNumber, LocalDate tenderDate, Client client) {
         this.tenderNumber = tenderNumber;
+        this.tenderDate = tenderDate;
         this.client = client;
-    }
-
-    public Long getTenderId() {
-        return tenderId;
-    }
-
-    public String getTenderNumber() {
-        return tenderNumber;
-    }
-
-    public Client getClient() {
-        return client;
     }
 }

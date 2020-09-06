@@ -1,10 +1,10 @@
 package com.github.dmtest.tender.domain;
 
-import lombok.ToString;
+import lombok.Getter;
 
 import javax.persistence.*;
 
-@ToString(of = {"productName", "manufacturer", "country"})
+@Getter
 @Entity
 @Table(name = "products")
 public class Product {
@@ -24,19 +24,4 @@ public class Product {
         this.country = country;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public String getCountry() {
-        return country;
-    }
 }
