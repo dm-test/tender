@@ -18,8 +18,8 @@ public class BusinessExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public final ResponseEntity<OperationResultRsDto> handleBusinessException(BusinessException e) {
-        OperationResultRsDto operationResultRsDto = new OperationResultRsDto(e.getOperationResult(), e.getDescription());
-        LOG.warn(e.getDescription(), e);
+        OperationResultRsDto operationResultRsDto = new OperationResultRsDto(e.getOperationResult(), e.getDetailMessage());
+        LOG.error(e.getDetailMessage(), e);
         return new ResponseEntity<>(operationResultRsDto, HttpStatus.OK);
     }
 }

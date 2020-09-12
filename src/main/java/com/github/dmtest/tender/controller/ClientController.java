@@ -2,7 +2,7 @@ package com.github.dmtest.tender.controller;
 
 import com.github.dmtest.tender.domain.Client;
 import com.github.dmtest.tender.dto.rq.ClientRqDto;
-import com.github.dmtest.tender.dto.rs.ClientRsDto;
+import com.github.dmtest.tender.dto.rs.body.ClientRsDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.repo.ClientsRepo;
@@ -26,12 +26,12 @@ public class ClientController {
     }
 
     @GetMapping("getClients")
-    public List<ClientRsDto> getClients() {
+    public OperationResultRsDto getClients() {
         List<ClientRsDto> clients = clientsRepo.findAll().stream()
                 .map(client -> new ClientRsDto(client.getClientName()))
                 .collect(Collectors.toList());
         LOG.info("Получен список клиентов");
-        return clients;
+        return new OperationResultRsDto(OperationResult.SUCCESS, clients);
     }
 
     @PostMapping("addClient")

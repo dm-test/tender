@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 public class BusinessException extends RuntimeException {
     private final OperationResult operationResult;
-    private final String description;
+    private final String detailMessage;
 
-    public BusinessException(OperationResult operationResult, String description) {
-        super(String.format("%s >> %s >> %s", operationResult.getResultCode(), operationResult.getTitle(), description));
+    public BusinessException(OperationResult operationResult, String detailMessage) {
+        super(String.format("%s >> %s >> %s", operationResult.getResultCode(), operationResult.getResultDescription(), detailMessage));
         this.operationResult = operationResult;
-        this.description = description;
+        this.detailMessage = detailMessage;
     }
 
 }

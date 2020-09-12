@@ -8,11 +8,11 @@ public enum OperationResult {
     CLIENT_NOT_FOUND(1000, "Клиент не найден");
 
     private final int resultCode;
-    private final String title;
+    private final String resultDescription;
 
-    OperationResult(int resultCode, String title) {
+    OperationResult(int resultCode, String resultDescription) {
         this.resultCode = resultCode;
-        this.title = title;
+        this.resultDescription = resultDescription;
     }
 
 }

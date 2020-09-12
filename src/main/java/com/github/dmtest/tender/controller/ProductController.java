@@ -3,7 +3,7 @@ package com.github.dmtest.tender.controller;
 import com.github.dmtest.tender.domain.Product;
 import com.github.dmtest.tender.dto.rq.ProductRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
-import com.github.dmtest.tender.dto.rs.ProductRsDto;
+import com.github.dmtest.tender.dto.rs.body.ProductRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.repo.ProductsRepo;
 import org.slf4j.Logger;
@@ -26,12 +26,12 @@ public class ProductController {
     }
 
     @GetMapping("getProducts")
-    public List<ProductRsDto> getProducts() {
+    public OperationResultRsDto getProducts() {
         List<ProductRsDto> products = productsRepo.findAll().stream()
                 .map(pr -> new ProductRsDto(pr.getProductName(), pr.getManufacturer(), pr.getCountry()))
                 .collect(Collectors.toList());
         LOG.info("Получен список продуктов");
-        return products;
+        return new OperationResultRsDto(OperationResult.SUCCESS, products);
     }
 
     @PostMapping("addProduct")

@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 public class OperationResultRsDto {
     private final int resultCode;
-    private final String title;
-    private final String description;
+    private final String resultDescription;
+    private final Object body;
 
-    public OperationResultRsDto(OperationResult operationResult, String description) {
+    public OperationResultRsDto(OperationResult operationResult, Object body) {
         resultCode = operationResult.getResultCode();
-        title = operationResult.getTitle();
-        this.description = description;
+        resultDescription = operationResult.getResultDescription();
+        this.body = body;
     }
 }

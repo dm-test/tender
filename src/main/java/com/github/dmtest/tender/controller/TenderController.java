@@ -4,7 +4,7 @@ import com.github.dmtest.tender.domain.Client;
 import com.github.dmtest.tender.domain.Tender;
 import com.github.dmtest.tender.dto.rq.TenderRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
-import com.github.dmtest.tender.dto.rs.TenderRsDto;
+import com.github.dmtest.tender.dto.rs.body.TenderRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.exception.BusinessException;
 import com.github.dmtest.tender.repo.ClientsRepo;
@@ -32,12 +32,12 @@ public class TenderController {
     }
 
     @GetMapping("getTenders")
-    public List<TenderRsDto> getTenders() {
+    public OperationResultRsDto getTenders() {
         List<TenderRsDto> tenders = tendersRepo.findAll().stream()
                 .map(tender -> new TenderRsDto(tender.getTenderNumber(), tender.getTenderDate()))
                 .collect(Collectors.toList());
         LOG.info("Получен список тендеров");
-        return tenders;
+        return new OperationResultRsDto(OperationResult.SUCCESS, tenders);
     }
 
     @PostMapping("addTender")
