@@ -1,8 +1,10 @@
 package com.github.dmtest.tender.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -14,6 +16,10 @@ public class Product {
     private String productName;
     private String manufacturer;
     private String country;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<TenderContent> tenderContents;
 
     protected Product() {
     }

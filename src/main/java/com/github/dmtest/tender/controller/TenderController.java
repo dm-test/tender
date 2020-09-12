@@ -2,7 +2,7 @@ package com.github.dmtest.tender.controller;
 
 import com.github.dmtest.tender.domain.Client;
 import com.github.dmtest.tender.domain.Tender;
-import com.github.dmtest.tender.dto.rq.TenderRqDto;
+import com.github.dmtest.tender.dto.rq.tenders.AddTenderRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.dto.rs.body.TenderRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
@@ -41,10 +41,10 @@ public class TenderController {
     }
 
     @PostMapping("addTender")
-    public OperationResultRsDto addTender(@RequestBody TenderRqDto tenderRqDto) {
-        String tenderNumber = tenderRqDto.getTenderNumber();
-        LocalDate tenderDate = tenderRqDto.getTenderDate();
-        String clientName = tenderRqDto.getClientName();
+    public OperationResultRsDto addTender(@RequestBody AddTenderRqDto addTenderRqDto) {
+        String tenderNumber = addTenderRqDto.getTenderNumber();
+        LocalDate tenderDate = addTenderRqDto.getTenderDate();
+        String clientName = addTenderRqDto.getClientName();
         Client client = clientsRepo.findAll().stream()
                 .filter(cl -> cl.getClientName().equals(clientName))
                 .findFirst()

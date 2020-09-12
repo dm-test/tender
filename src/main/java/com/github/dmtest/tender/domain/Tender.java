@@ -1,10 +1,12 @@
 package com.github.dmtest.tender.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -22,6 +24,10 @@ public class Tender {
     @JoinColumn(name = "client_id")
     @JsonBackReference
     private Client client;
+
+    @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<TenderContent> tenderContents;
 
     protected Tender() {
     }
