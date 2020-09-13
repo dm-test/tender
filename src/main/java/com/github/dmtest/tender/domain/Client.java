@@ -2,9 +2,11 @@ package com.github.dmtest.tender.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -12,7 +14,8 @@ import java.util.Set;
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long clientId;
+    @Type(type="uuid-char")
+    private UUID clientId;
 
     private String clientName;
 

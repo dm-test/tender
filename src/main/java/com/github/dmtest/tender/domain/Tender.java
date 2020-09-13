@@ -3,10 +3,12 @@ package com.github.dmtest.tender.domain;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -14,7 +16,8 @@ import java.util.Set;
 public class Tender {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long tenderId;
+    @Type(type="uuid-char")
+    private UUID tenderId;
 
     private String tenderNumber;
 

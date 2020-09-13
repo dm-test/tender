@@ -2,9 +2,11 @@ package com.github.dmtest.tender.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -12,7 +14,8 @@ import java.math.BigDecimal;
 public class TenderContent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long contentId;
+    @Type(type="uuid-char")
+    private UUID contentId;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tender_id")
