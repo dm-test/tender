@@ -21,9 +21,9 @@ public class Product {
     private String manufacturer;
     private String country;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<TenderContent> tenderContents;
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private Set<TenderItem> tenderContents;
 
     protected Product() {
     }

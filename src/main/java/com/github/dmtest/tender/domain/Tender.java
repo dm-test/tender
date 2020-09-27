@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,14 +24,13 @@ public class Tender {
 
     private LocalDate tenderDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "client_id")
     @JsonBackReference
     private Client client;
 
-    @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<TenderContent> tenderContents;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tender")
+    private final Set<TenderItem> items = new HashSet<>();
 
     protected Tender() {
     }
@@ -39,5 +39,10 @@ public class Tender {
         this.tenderNumber = tenderNumber;
         this.tenderDate = tenderDate;
         this.client = client;
+    }
+
+    public void addItem(TenderItem item) {
+        items.add(item);
+        item.setTender(this);
     }
 }

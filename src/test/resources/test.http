@@ -32,15 +32,7 @@ Content-Type: application/json
 {
   "tenderNumber": "123",
   "tenderDate": "01.10.2020",
-  "clientName": "Тарская ЦРБ"
-}
-
-###
-POST http://localhost:8080/tenderContents/addTenderContents
-Content-Type: application/json
-
-{
-  "tenderNumber": "123",
+  "clientName": "Тарская ЦРБ",
   "tenderContents": [
     {
       "productName": "Диаскинтест",
