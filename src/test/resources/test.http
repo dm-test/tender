@@ -23,26 +23,14 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/tenders/getTenders
+GET http://localhost:8080/tenders/getTenders?clientId=6cd67894-d1c7-41ed-8169-0e44ccdd3cc0
 
 ###
 POST http://localhost:8080/tenders/addTender
 Content-Type: application/json
 
 {
-  "tenderNumber": "123",
-  "tenderDate": "01.10.2020",
-  "clientName": "Тарская ЦРБ",
-  "tenderContents": [
-    {
-      "productName": "Диаскинтест",
-      "quantity": 5,
-      "costPerUnit": 25.52
-    },
-    {
-      "productName": "Диаскинтест1",
-      "quantity": 10,
-      "costPerUnit": 125.65
-    }
-  ]
+  "clientId": "6cd67894-d1c7-41ed-8169-0e44ccdd3cc0",
+  "tenderNumber": "124",
+  "tenderDate": "01.10.2020"
 }
