@@ -10,30 +10,30 @@ import java.util.UUID;
 
 @Getter
 @Entity
-@Table(name = "tender_contents")
-public class TenderContent {
+@Table(name = "tender_items")
+public class TenderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type="uuid-char")
-    private UUID contentId;
+    private UUID itemId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tender_id")
-    @JsonBackReference
+//    @JsonBackReference
     private Tender tender;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    @JsonBackReference
+//    @JsonBackReference
     private Product product;
 
     private Integer quantity;
     private BigDecimal costPerUnit;
 
-    protected TenderContent() {
+    protected TenderItem() {
     }
 
-    public TenderContent(Tender tender, Product product, Integer quantity, BigDecimal costPerUnit) {
+    public TenderItem(Tender tender, Product product, Integer quantity, BigDecimal costPerUnit) {
         this.tender = tender;
         this.product = product;
         this.quantity = quantity;

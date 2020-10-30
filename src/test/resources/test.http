@@ -17,40 +17,31 @@ POST http://localhost:8080/products/addProduct
 Content-Type: application/json
 
 {
-  "productName": "Диаскинтест1",
+  "productName": "Диаскинтест",
   "manufacturer": "ООО Биосинтез",
   "country": "Россия"
 }
 
 ###
-GET http://localhost:8080/tenders/getTenders
-
+GET http://localhost:8080/tenders/getTenders?clientId=54d486b0-068c-4431-9026-2fe8dda2d29e
 ###
 POST http://localhost:8080/tenders/addTender
 Content-Type: application/json
 
 {
-  "tenderNumber": "123",
+  "clientId": "f6b46326-9ed3-431d-a257-91b1f701e501",
+  "tenderNumber": "124",
   "tenderDate": "01.10.2020",
-  "clientName": "Тарская ЦРБ"
-}
-
-###
-POST http://localhost:8080/tenderContents/addTenderContents
-Content-Type: application/json
-
-{
-  "tenderNumber": "123",
-  "tenderContents": [
+  "tenderItems": [
     {
-      "productName": "Диаскинтест",
+      "productId": "ca8fd323-0710-47b4-95c9-a06b7f49a83d",
       "quantity": 5,
-      "costPerUnit": 25.52
+      "costPerUnit": 156.75
     },
     {
-      "productName": "Диаскинтест1",
+      "productId": "aacb42a5-f2f0-4980-8145-e9bb67983ae3",
       "quantity": 10,
-      "costPerUnit": 125.65
+      "costPerUnit": 15.80
     }
   ]
 }

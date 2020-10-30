@@ -1,12 +1,12 @@
 package com.github.dmtest.tender.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,21 +23,28 @@ public class Tender {
 
     private LocalDate tenderDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
-    @JsonBackReference
+//    @JsonBackReference
     private Client client;
 
-    @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<TenderContent> tenderContents;
+    @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final Set<TenderItem> items = new HashSet<>();
 
     protected Tender() {
     }
 
-    public Tender(String tenderNumber, LocalDate tenderDate, Client client) {
+    public Tender(String tenderNumber, LocalDate tenderDate) {
         this.tenderNumber = tenderNumber;
         this.tenderDate = tenderDate;
+    }
+
+    public void setClient(Client client) {
         this.client = client;
     }
+
+    public void addItem(TenderItem item) {
+        items.add(item);
+    }
+
 }
