@@ -2,7 +2,7 @@ package com.github.dmtest.tender.controller;
 
 import com.github.dmtest.tender.domain.Client;
 import com.github.dmtest.tender.domain.Tender;
-import com.github.dmtest.tender.dto.rq.tenders.AddTenderRqDto;
+import com.github.dmtest.tender.dto.rq.AddTenderRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.dto.rs.body.TenderRsDto;
 import com.github.dmtest.tender.enums.OperationResult;

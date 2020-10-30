@@ -28,7 +28,7 @@ public class ClientController {
     @GetMapping("getClients")
     public OperationResultRsDto getClients() {
         List<ClientRsDto> clients = clientsRepo.findAll().stream()
-                .map(client -> new ClientRsDto(client.getClientName()))
+                .map(cl -> new ClientRsDto(cl.getClientId(), cl.getClientName()))
                 .collect(Collectors.toList());
         LOG.info("Получен список клиентов");
         return new OperationResultRsDto(OperationResult.SUCCESS, clients);

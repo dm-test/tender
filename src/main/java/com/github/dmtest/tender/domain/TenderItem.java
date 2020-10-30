@@ -19,13 +19,13 @@ public class TenderItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tender_id")
-    @JsonBackReference
+//    @JsonBackReference
     private Tender tender;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    @JsonBackReference
-    private Product product;
+//    @ManyToOne
+//    @JoinColumn(name = "product_id")
+//    @JsonBackReference
+    private String product;
 
     private Integer quantity;
     private BigDecimal costPerUnit;
@@ -33,7 +33,7 @@ public class TenderItem {
     protected TenderItem() {
     }
 
-    public TenderItem(Product product, Integer quantity, BigDecimal costPerUnit) {
+    public TenderItem(String product, Integer quantity, BigDecimal costPerUnit) {
         this.product = product;
         this.quantity = quantity;
         this.costPerUnit = costPerUnit;

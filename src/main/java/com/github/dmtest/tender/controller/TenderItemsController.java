@@ -1,24 +1,22 @@
 package com.github.dmtest.tender.controller;
 
+import com.github.dmtest.tender.repo.TendersRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("tenderContents")
-public class TenderContentsController {
-    private static final Logger LOG = LoggerFactory.getLogger(TenderContentsController.class);
-//    private final TendersRepo tendersRepo;
-//    private final TenderContentsRepo tenderContentsRepo;
-//    private final ProductsRepo productsRepo;
+@RequestMapping("tenderItems")
+public class TenderItemsController {
+    private static final Logger LOG = LoggerFactory.getLogger(TenderItemsController.class);
+    private final TendersRepo tendersRepo;
 
-//    @Autowired
-//    public TenderContentsController(TendersRepo tendersRepo, TenderContentsRepo tenderContentsRepo, ProductsRepo productsRepo) {
-//        this.tendersRepo = tendersRepo;
-//        this.tenderContentsRepo = tenderContentsRepo;
-//        this.productsRepo = productsRepo;
-//    }
+    @Autowired
+    public TenderItemsController(TendersRepo tendersRepo) {
+        this.tendersRepo = tendersRepo;
+    }
 
 //    @PostMapping("addTenderContents")
 //    public OperationResultRsDto addTenderContents(@RequestBody AddTenderContentsRqDto addTenderContentsRqDto) {

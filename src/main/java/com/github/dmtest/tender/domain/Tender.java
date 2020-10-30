@@ -1,7 +1,6 @@
 package com.github.dmtest.tender.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import org.hibernate.annotations.Type;
 
@@ -29,8 +28,8 @@ public class Tender {
 //    @JsonBackReference
     private Client client;
 
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tender")
-//    private final Set<TenderItem> items = new HashSet<>();
+    @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TenderItem> items;
 
     protected Tender() {
     }
@@ -38,15 +37,16 @@ public class Tender {
     public Tender(String tenderNumber, LocalDate tenderDate) {
         this.tenderNumber = tenderNumber;
         this.tenderDate = tenderDate;
+        items = new HashSet<>();
     }
 
     public void setClient(Client client) {
         this.client = client;
     }
 
-//    public void addItem(TenderItem item) {
-//        items.add(item);
-//        item.setTender(this);
+    public void addItem(TenderItem item) {
+        item.setTender(this);
+        items.add(item);
+    }
 
-//    }
 }

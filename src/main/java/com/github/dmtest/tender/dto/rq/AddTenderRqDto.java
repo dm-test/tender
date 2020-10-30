@@ -1,4 +1,4 @@
-package com.github.dmtest.tender.dto.rq.tenders;
+package com.github.dmtest.tender.dto.rq;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

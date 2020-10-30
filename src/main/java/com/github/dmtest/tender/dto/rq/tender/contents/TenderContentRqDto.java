@@ -1,4 +1,4 @@
-package com.github.dmtest.tender.dto.rq.tenders.contents;
+package com.github.dmtest.tender.dto.rq.tender.contents;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
