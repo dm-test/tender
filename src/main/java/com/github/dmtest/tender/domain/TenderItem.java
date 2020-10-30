@@ -33,13 +33,10 @@ public class TenderItem {
     protected TenderItem() {
     }
 
-    public TenderItem(Product product, Integer quantity, BigDecimal costPerUnit) {
+    public TenderItem(Tender tender, Product product, Integer quantity, BigDecimal costPerUnit) {
+        this.tender = tender;
         this.product = product;
         this.quantity = quantity;
         this.costPerUnit = costPerUnit;
-    }
-
-    public void setTender(Tender tender) {
-        this.tender = tender;
     }
 }

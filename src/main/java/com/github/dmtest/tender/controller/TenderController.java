@@ -5,7 +5,6 @@ import com.github.dmtest.tender.domain.Product;
 import com.github.dmtest.tender.domain.Tender;
 import com.github.dmtest.tender.domain.TenderItem;
 import com.github.dmtest.tender.dto.rq.AddTenderRqDto;
-import com.github.dmtest.tender.dto.rq.TenderItemRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.dto.rs.body.TenderRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
@@ -18,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -50,19 +47,17 @@ public class TenderController {
 
     @PostMapping("addTender")
     public OperationResultRsDto addTender(@RequestBody AddTenderRqDto addTenderRqDto) {
-        UUID clientId = addTenderRqDto.getClientId();
         String tenderNumber = addTenderRqDto.getTenderNumber();
         LocalDate tenderDate = addTenderRqDto.getTenderDate();
-        List<TenderItemRqDto> tenderItemsRqDto = addTenderRqDto.getTenderItems();
-        Set<TenderItem> tenderItems = new HashSet<>();
-        tenderItemsRqDto.forEach(dto -> {
+        Tender tender = new Tender(tenderNumber, tenderDate);
+        addTenderRqDto.getTenderItems().forEach(dto -> {
             UUID productId = dto.getProductId();
             Product product = productsRepo.findById(productId)
                     .orElseThrow(() -> new BusinessException(OperationResult.PRODUCT_NOT_FOUND, String.format("Продукт с id '%s' не найден", productId)));
-            TenderItem tenderItem = new TenderItem(product, dto.getQuantity(), dto.getCostPerUnit());
-            tenderItems.add(tenderItem);
+            TenderItem tenderItem = new TenderItem(tender, product, dto.getQuantity(), dto.getCostPerUnit());
+            tender.addItem(tenderItem);
         });
-        Tender tender = new Tender(tenderNumber, tenderDate, tenderItems);
+        UUID clientId = addTenderRqDto.getClientId();
         Client client = clientsRepo.findById(clientId)
                 .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с id '%s' не найден", clientId)));
         client.addTender(tender);

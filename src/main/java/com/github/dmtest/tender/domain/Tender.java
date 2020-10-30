@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,16 +29,14 @@ public class Tender {
     private Client client;
 
     @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<TenderItem> items;
+    private final Set<TenderItem> items = new HashSet<>();
 
     protected Tender() {
     }
 
-    public Tender(String tenderNumber, LocalDate tenderDate, Set<TenderItem> items) {
+    public Tender(String tenderNumber, LocalDate tenderDate) {
         this.tenderNumber = tenderNumber;
         this.tenderDate = tenderDate;
-        items.forEach(item -> item.setTender(this));
-        this.items = items;
     }
 
     public void setClient(Client client) {
@@ -45,7 +44,6 @@ public class Tender {
     }
 
     public void addItem(TenderItem item) {
-        item.setTender(this);
         items.add(item);
     }
 
