@@ -22,10 +22,10 @@ public class TenderItem {
 //    @JsonBackReference
     private Tender tender;
 
-//    @ManyToOne
-//    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
 //    @JsonBackReference
-    private String product;
+    private Product product;
 
     private Integer quantity;
     private BigDecimal costPerUnit;
@@ -33,7 +33,7 @@ public class TenderItem {
     protected TenderItem() {
     }
 
-    public TenderItem(String product, Integer quantity, BigDecimal costPerUnit) {
+    public TenderItem(Product product, Integer quantity, BigDecimal costPerUnit) {
         this.product = product;
         this.quantity = quantity;
         this.costPerUnit = costPerUnit;
