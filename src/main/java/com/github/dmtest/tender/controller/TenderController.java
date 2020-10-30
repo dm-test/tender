@@ -2,6 +2,7 @@ package com.github.dmtest.tender.controller;
 
 import com.github.dmtest.tender.domain.Client;
 import com.github.dmtest.tender.domain.Tender;
+import com.github.dmtest.tender.domain.TenderItem;
 import com.github.dmtest.tender.dto.rq.AddTenderRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.dto.rs.body.TenderRsDto;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,10 +44,13 @@ public class TenderController {
 
     @PostMapping("addTender")
     public OperationResultRsDto addTender(@RequestBody AddTenderRqDto addTenderRqDto) {
+        UUID clientId = addTenderRqDto.getClientId();
         String tenderNumber = addTenderRqDto.getTenderNumber();
         LocalDate tenderDate = addTenderRqDto.getTenderDate();
-        UUID clientId = addTenderRqDto.getClientId();
-        Tender tender = new Tender(tenderNumber, tenderDate);
+        Set<TenderItem> tenderItems = addTenderRqDto.getTenderItems().stream()
+                .map(dto -> new TenderItem(dto.getProductName(), dto.getQuantity(), dto.getCostPerUnit()))
+                .collect(Collectors.toSet());
+        Tender tender = new Tender(tenderNumber, tenderDate, tenderItems);
         Client client = clientsRepo.findById(clientId)
                 .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с id '%s' не найден", clientId)));
         client.addTender(tender);

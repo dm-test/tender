@@ -23,14 +23,25 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/tenders/getTenders?clientId=6cd67894-d1c7-41ed-8169-0e44ccdd3cc0
-
+GET http://localhost:8080/tenders/getTenders?clientId=346b6cd4-b1bc-4229-b4f5-13667c2cb8e9
 ###
 POST http://localhost:8080/tenders/addTender
 Content-Type: application/json
 
 {
-  "clientId": "6cd67894-d1c7-41ed-8169-0e44ccdd3cc0",
+  "clientId": "346b6cd4-b1bc-4229-b4f5-13667c2cb8e9",
   "tenderNumber": "124",
-  "tenderDate": "01.10.2020"
+  "tenderDate": "01.10.2020",
+  "tenderItems": [
+    {
+      "productName": "Димедрол",
+      "quantity": 5,
+      "costPerUnit": 156.75
+    },
+    {
+      "productName": "Аспирин",
+      "quantity": 10,
+      "costPerUnit": 15.80
+    }
+  ]
 }

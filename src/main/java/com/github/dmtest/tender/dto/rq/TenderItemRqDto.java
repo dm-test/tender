@@ -1,4 +1,4 @@
-package com.github.dmtest.tender.dto.rq.tender.contents;
+package com.github.dmtest.tender.dto.rq;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TenderContentRqDto {
+public class TenderItemRqDto {
     private String productName;
     private Integer quantity;
     private BigDecimal costPerUnit;

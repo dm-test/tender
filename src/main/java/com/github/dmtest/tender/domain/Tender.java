@@ -6,7 +6,6 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,10 +33,11 @@ public class Tender {
     protected Tender() {
     }
 
-    public Tender(String tenderNumber, LocalDate tenderDate) {
+    public Tender(String tenderNumber, LocalDate tenderDate, Set<TenderItem> items) {
         this.tenderNumber = tenderNumber;
         this.tenderDate = tenderDate;
-        items = new HashSet<>();
+        items.forEach(item -> item.setTender(this));
+        this.items = items;
     }
 
     public void setClient(Client client) {
