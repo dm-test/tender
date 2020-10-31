@@ -23,7 +23,8 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/tenders/getTenders?clientId=54d486b0-068c-4431-9026-2fe8dda2d29e
+GET http://localhost:8080/tenders/getClientTenders?clientId=f6b46326-9ed3-431d-a257-91b1f701e501
+
 ###
 POST http://localhost:8080/tenders/addTender
 Content-Type: application/json
@@ -45,3 +46,7 @@ Content-Type: application/json
     }
   ]
 }
+
+###
+GET http://localhost:8080/tenders/getTenderDetails?tenderId=4ae329b1-feb4-43c7-ad4f-52d14c229a8e
+
