@@ -5,6 +5,7 @@ import com.github.dmtest.tender.domain.Product;
 import com.github.dmtest.tender.domain.Tender;
 import com.github.dmtest.tender.domain.TenderItem;
 import com.github.dmtest.tender.dto.rq.AddTenderRqDto;
+import com.github.dmtest.tender.dto.rq.GetTendersRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.dto.rs.body.GetTenderDetailsRsDto;
 import com.github.dmtest.tender.dto.rs.body.TenderItemRsDto;
@@ -40,15 +41,22 @@ public class TenderController {
         this.tendersRepo = tendersRepo;
     }
 
-    @GetMapping("getTenders")
-    public OperationResultRsDto getClientTenders(@RequestParam("clientId") UUID clientId) {
-        Client client = clientsRepo.findById(clientId)
-                .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с id '%s' не найден", clientId)));
-        List<TenderRsDto> tenders = client.getTenders().stream()
+    @PostMapping("getTenders")
+    public OperationResultRsDto getTenders(@RequestBody GetTendersRqDto getTendersRqDto) {
+        UUID clientId = getTendersRqDto.getClientId();
+        List<Tender> tenders;
+        if (clientId == null) {
+            tenders = tendersRepo.findAll();
+        } else {
+            Client client = clientsRepo.findById(clientId)
+                    .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с id '%s' не найден", clientId)));
+            tenders = client.getTenders();
+        }
+        List<TenderRsDto> tenderRsDtoList = tenders.stream()
                 .map(tn -> new TenderRsDto(tn.getTenderId(), tn.getTenderNumber(), tn.getTenderDate()))
                 .collect(Collectors.toList());
         LOG.info("Получен список тендеров клиента '{}'", clientId);
-        return new OperationResultRsDto(OperationResult.SUCCESS, tenders);
+        return new OperationResultRsDto(OperationResult.SUCCESS, tenderRsDtoList);
     }
 
     @PostMapping("addTender")

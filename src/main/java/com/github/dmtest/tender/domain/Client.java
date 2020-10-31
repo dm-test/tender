@@ -5,8 +5,8 @@ import lombok.Getter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -22,14 +22,14 @@ public class Client {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @JsonManagedReference
-    private Set<Tender> tenders;
+    private List<Tender> tenders;
 
     protected Client() {
     }
 
     public Client(String clientName) {
         this.clientName = clientName;
-        tenders = new HashSet<>();
+        tenders = new ArrayList<>();
     }
 
     public void addTender(Tender tender) {

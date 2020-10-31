@@ -23,7 +23,20 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/tenders/getClientTenders?clientId=f6b46326-9ed3-431d-a257-91b1f701e501
+POST http://localhost:8080/tenders/getTenders
+Content-Type: application/json
+
+{
+  "clientId": null
+}
+
+###
+POST http://localhost:8080/tenders/getTenders
+Content-Type: application/json
+
+{
+  "clientId": "f6b46326-9ed3-431d-a257-91b1f701e501"
+}
 
 ###
 POST http://localhost:8080/tenders/addTender
