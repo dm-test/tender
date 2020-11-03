@@ -1,4 +1,4 @@
-package com.github.dmtest.tender.dto.rq;
+package com.github.dmtest.tender.dto.rq.tender;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GetTendersRqDto {
-    private UUID clientId;
+public class DeleteTenderRqDto {
+    private UUID tenderId;
 }

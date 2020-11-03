@@ -1,4 +1,4 @@
-package com.github.dmtest.tender.dto.rq;
+package com.github.dmtest.tender.dto.rq.item;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TenderItemRqDto {
+public class AddTenderItemRqDto {
+    private UUID tenderId;
     private UUID productId;
     private Integer quantity;
     private BigDecimal costPerUnit;

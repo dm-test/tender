@@ -2,15 +2,18 @@ package com.github.dmtest.tender.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
+@ToString
 @Entity
 @Table(name = "tenders")
 public class Tender {
@@ -21,15 +24,18 @@ public class Tender {
 
     private String tenderNumber;
 
+    @Setter
     private LocalDate tenderDate;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
 //    @JsonBackReference
     private Client client;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final Set<TenderItem> items = new HashSet<>();
+    private final List<TenderItem> items = new ArrayList<>();
 
     protected Tender() {
     }
@@ -39,11 +45,8 @@ public class Tender {
         this.tenderDate = tenderDate;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
     public void addItem(TenderItem item) {
+        item.setTender(this);
         items.add(item);
     }
 

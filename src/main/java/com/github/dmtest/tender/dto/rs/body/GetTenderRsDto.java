@@ -9,9 +9,10 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class TenderRsDto {
+public class GetTenderRsDto {
     private final UUID tenderId;
     private final String tenderNumber;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private final LocalDate tenderDate;
+    private final String clientName;
 }

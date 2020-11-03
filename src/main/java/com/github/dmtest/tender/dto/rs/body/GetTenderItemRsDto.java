@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class TenderItemRsDto {
+public class GetTenderItemRsDto {
     private final UUID itemId;
     private final String productName;
     private final Integer quantity;

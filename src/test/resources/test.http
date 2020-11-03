@@ -23,20 +23,15 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/tenders/getTenders
-Content-Type: application/json
-
-{
-  "clientId": null
-}
-
-###
-POST http://localhost:8080/tenders/getTenders
+POST http://localhost:8080/tenders/getTendersByClientId?clientId=f6b46326-9ed3-431d-a257-91b1f701e501
 Content-Type: application/json
 
 {
   "clientId": "f6b46326-9ed3-431d-a257-91b1f701e501"
 }
+
+###
+GET http://localhost:8080/tenders/getTender?tenderId=a2c02b95-4559-4fe0-89ed-0504b4b0a81e
 
 ###
 POST http://localhost:8080/tenders/addTender
@@ -61,5 +56,21 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/tenders/getTenderDetails?tenderId=4ae329b1-feb4-43c7-ad4f-52d14c229a8e
+PUT http://localhost:8080/tenders/updateTender
+Content-Type: application/json
+
+{
+  "tenderId": "4ae329b1-feb4-43c7-ad4f-52d14c229a8e",
+  "clientId": "f6b46326-9ed3-431d-a257-91b1f701e501",
+  "tenderDate": "01.10.2021"
+}
+
+###
+DELETE http://localhost:8080/tenders/deleteTender
+Content-Type: application/json
+
+{
+  "tenderId": "4ae329b1-feb4-43c7-ad4f-52d14c229a8e"
+}
+
 
