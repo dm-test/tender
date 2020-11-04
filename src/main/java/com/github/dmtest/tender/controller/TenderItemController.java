@@ -9,9 +9,8 @@ import com.github.dmtest.tender.dto.rq.item.UpdateTenderItemRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.dto.rs.body.GetTenderItemRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
-import com.github.dmtest.tender.exception.BusinessException;
-import com.github.dmtest.tender.repo.ProductsRepo;
-import com.github.dmtest.tender.repo.TendersRepo;
+import com.github.dmtest.tender.service.ProductService;
+import com.github.dmtest.tender.service.TenderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +24,18 @@ import java.util.stream.Collectors;
 @RequestMapping("tenderItems")
 public class TenderItemController {
     private static final Logger LOG = LoggerFactory.getLogger(TenderItemController.class);
-    private final TendersRepo tendersRepo;
-    private final ProductsRepo productsRepo;
+    private final TenderService tenderService;
+    private final ProductService productService;
 
     @Autowired
-    public TenderItemController(TendersRepo tendersRepo, ProductsRepo productsRepo) {
-        this.tendersRepo = tendersRepo;
-        this.productsRepo = productsRepo;
+    public TenderItemController(TenderService tenderService, ProductService productService) {
+        this.tenderService = tenderService;
+        this.productService = productService;
     }
 
     @GetMapping("getTenderItems")
     public OperationResultRsDto getTenderItems(@RequestParam("tenderNumber") String tenderNumber) {
-        Tender tender = tendersRepo.findByTenderNumber(tenderNumber)
-                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с номером '%s' не найден", tenderNumber)));
+        Tender tender = tenderService.getTenderByTenderNumber(tenderNumber);
         List<GetTenderItemRsDto> getTenderItemRsDtoList = tender.getItems().stream()
                 .map(it -> new GetTenderItemRsDto(it.getProduct().getProductName(), it.getQuantity(), it.getCostPerUnit()))
                 .collect(Collectors.toList());
@@ -49,13 +47,11 @@ public class TenderItemController {
     public OperationResultRsDto addTenderItem(@RequestBody AddTenderItemRqDto rqDto) {
         String tenderNumber = rqDto.getTenderNumber();
         String productName = rqDto.getProductName();
-        Tender tender = tendersRepo.findByTenderNumber(tenderNumber)
-                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с номером '%s' не найден", tenderNumber)));
-        Product product = productsRepo.findByProductName(productName)
-                .orElseThrow(() -> new BusinessException(OperationResult.PRODUCT_NOT_FOUND, String.format("Продукт с именем '%s' не найден", productName)));
+        Tender tender = tenderService.getTenderByTenderNumber(tenderNumber);
+        Product product = productService.getProductByProductName(productName);
         TenderItem item = new TenderItem(product, rqDto.getQuantity(), rqDto.getCostPerUnit(), tender);
         tender.addItem(item);
-        tendersRepo.save(tender);
+        tenderService.saveTender(tender);
         LOG.info("Позиция тендера '{}' добавлена тендеру '{}'", item, tender);
         String msg = String.format("Позиция добавлена тендеру '%s'", tenderNumber);
         return new OperationResultRsDto(OperationResult.SUCCESS, msg);
@@ -65,21 +61,18 @@ public class TenderItemController {
     public OperationResultRsDto updateTenderItem(@RequestBody UpdateTenderItemRqDto rqDto) {
         String tenderNumber = rqDto.getTenderNumber();
         String productName = rqDto.getProductName();
-        Tender tender = tendersRepo.findByTenderNumber(tenderNumber)
-                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с номером '%s' не найден", tenderNumber)));
-        TenderItem item = tender.getItem(productName)
-                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_ITEM_NOT_FOUND, String.format("Позиция тендера с продуктом '%s' у тендера '%s' не найдена", productName, tenderNumber)));
+        Tender tender = tenderService.getTenderByTenderNumber(tenderNumber);
+        TenderItem item = tenderService.getTenderItem(tender, productName);
         Integer quantity = item.getQuantity();
         BigDecimal costPerUnit = item.getCostPerUnit();
         String productNameNew = rqDto.getUpdatableData().getProductNameNew();
         Integer quantityNew = rqDto.getUpdatableData().getQuantityNew();
         BigDecimal costPerUnitNew = rqDto.getUpdatableData().getCostPerUnitNew();
-        Product productNew = productsRepo.findByProductName(productNameNew)
-                .orElseThrow(() -> new BusinessException(OperationResult.PRODUCT_NOT_FOUND, String.format("Продукт с именем '%s' не найден", productName)));
+        Product productNew = productService.getProductByProductName(productNameNew);
         item.setProduct(productNew);
         item.setQuantity(quantityNew);
         item.setCostPerUnit(costPerUnitNew);
-        tendersRepo.save(tender);
+        tenderService.saveTender(tender);
         LOG.info("Позиция тендера '{}' с продуктом '{}' обновлена. Продукт: '{}' -> '{}', Кол-во: '{}' -> '{}', Цена за ед: '{}' -> '{}'",
                 tenderNumber, productName, productName, productNameNew, quantity, quantityNew, costPerUnit, costPerUnitNew);
         return new OperationResultRsDto(OperationResult.SUCCESS, "Позиция тендера успешно обновлена");
@@ -89,13 +82,9 @@ public class TenderItemController {
     public OperationResultRsDto removeTenderItem(@RequestBody RemoveTenderItemRqDto removeTenderItemRqDto) {
         String tenderNumber = removeTenderItemRqDto.getTenderNumber();
         String productName = removeTenderItemRqDto.getProductName();
-        Tender tender = tendersRepo.findByTenderNumber(tenderNumber)
-                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с номером '%s' не найден", tenderNumber)));
-        boolean result = tender.removeItem(productName);
-        if (!result) {
-            throw new BusinessException(OperationResult.TENDER_ITEM_NOT_FOUND, String.format("Позиция тендера с продуктом '%s' у тендера '%s' не найдена", productName, tenderNumber));
-        }
-        tendersRepo.save(tender);
+        Tender tender = tenderService.getTenderByTenderNumber(tenderNumber);
+        tenderService.removeTenderItem(tender, productName);
+        tenderService.saveTender(tender);
         LOG.info("Позиция тендера с продуктом '{}' удалена у тендера '{}'", productName, tenderNumber);
         return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Позиция тендера с продуктом '%s' успешно удалена", productName));
     }
