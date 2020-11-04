@@ -5,14 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class AddTenderItemRqDto {
-    private UUID tenderId;
-    private UUID productId;
+    private String tenderNumber;
+    private String productName;
     private Integer quantity;
     private BigDecimal costPerUnit;
 }

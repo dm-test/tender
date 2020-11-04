@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Getter
@@ -46,8 +47,15 @@ public class Tender {
     }
 
     public void addItem(TenderItem item) {
-        item.setTender(this);
         items.add(item);
+    }
+
+    public Optional<TenderItem> getItem(String productName) {
+        return items.stream().filter(item -> item.getProduct().getProductName().equals(productName)).findFirst();
+    }
+
+    public boolean removeItem(String productName) {
+        return items.removeIf(item -> item.getProduct().getProductName().equals(productName));
     }
 
 }

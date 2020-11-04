@@ -3,7 +3,7 @@ package com.github.dmtest.tender.controller;
 import com.github.dmtest.tender.domain.Client;
 import com.github.dmtest.tender.domain.Tender;
 import com.github.dmtest.tender.dto.rq.tender.AddTenderRqDto;
-import com.github.dmtest.tender.dto.rq.tender.GetTenderRqDto;
+import com.github.dmtest.tender.dto.rq.tender.RemoveTenderRqDto;
 import com.github.dmtest.tender.dto.rq.tender.GetTendersRqDto;
 import com.github.dmtest.tender.dto.rq.tender.UpdateTenderRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
@@ -73,7 +73,7 @@ public class TenderController {
         Tender tender = new Tender(tenderNumber, tenderDate, client);
         client.addTender(tender);
         clientsRepo.save(client);
-        LOG.info("Тендер добавлен: {}", tender);
+        LOG.info("Тендер '{}' добавлен клиенту '{}'", tender, client);
         String msg = String.format("Тендер с номером '%s' добавлен клиенту '%s'", tenderNumber, clientName);
         return new OperationResultRsDto(OperationResult.SUCCESS, msg);
     }
@@ -93,13 +93,13 @@ public class TenderController {
         tender.setTenderDate(tenderDateNew);
         clientsRepo.save(client);
         LOG.info("Тендер с номером '{}' обновлен. Номер тендера: '{}' -> '{}', Дата тендера: '{}' -> '{}'", tenderNumber, tenderNumber, tenderNumberNew, tenderDate, tenderDateNew);
-        return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Тендер '%s' успешно обновлен", tender.getTenderNumber()));
+        return new OperationResultRsDto(OperationResult.SUCCESS, "Тендер успешно обновлен");
     }
 
-    @DeleteMapping("deleteTender")
-    public OperationResultRsDto deleteTender(@RequestBody GetTenderRqDto getTenderRqDto) {
-        String clientName = getTenderRqDto.getClientName();
-        String tenderNumber = getTenderRqDto.getTenderNumber();
+    @DeleteMapping("removeTender")
+    public OperationResultRsDto removeTender(@RequestBody RemoveTenderRqDto removeTenderRqDto) {
+        String clientName = removeTenderRqDto.getClientName();
+        String tenderNumber = removeTenderRqDto.getTenderNumber();
         Client client = clientsRepo.findByClientName(clientName)
                 .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с именем '%s' не найден", clientName)));
         boolean result = client.removeTender(tenderNumber);

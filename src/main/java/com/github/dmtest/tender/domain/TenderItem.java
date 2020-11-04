@@ -20,7 +20,6 @@ public class TenderItem {
     @Type(type="uuid-char")
     private UUID itemId;
 
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tender_id")
 //    @JsonBackReference
@@ -41,9 +40,10 @@ public class TenderItem {
     protected TenderItem() {
     }
 
-    public TenderItem(Product product, Integer quantity, BigDecimal costPerUnit) {
+    public TenderItem(Product product, Integer quantity, BigDecimal costPerUnit, Tender tender) {
         this.product = product;
         this.quantity = quantity;
         this.costPerUnit = costPerUnit;
+        this.tender = tender;
     }
 }

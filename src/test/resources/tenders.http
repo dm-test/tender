@@ -1,26 +1,5 @@
 ###
-GET http://localhost:8080/clients/getClients
-
-###
-POST http://localhost:8080/clients/addClient
-Content-Type: application/json
-
-{
-  "clientName": "Тарская ЦРБ"
-}
-
-###
-GET http://localhost:8080/products/getProducts
-
-###
-POST http://localhost:8080/products/addProduct
-Content-Type: application/json
-
-{
-  "productName": "Диаскинтест",
-  "manufacturer": "ООО Биосинтез",
-  "country": "Россия"
-}
+GET http://localhost:8080/tenders/getTender?tenderNumber=125
 
 ###
 POST http://localhost:8080/tenders/getTenders
@@ -29,9 +8,6 @@ Content-Type: application/json
 {
   "clientName": "Тарская ЦРБ"
 }
-
-###
-GET http://localhost:8080/tenders/getTender?tenderNumber=125
 
 ###
 POST http://localhost:8080/tenders/addTender
@@ -57,7 +33,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/tenders/deleteTender
+DELETE http://localhost:8080/tenders/removeTender
 Content-Type: application/json
 
 {
