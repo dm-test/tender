@@ -23,36 +23,24 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/tenders/getTendersByClientId?clientId=f6b46326-9ed3-431d-a257-91b1f701e501
+POST http://localhost:8080/tenders/getTenders
 Content-Type: application/json
 
 {
-  "clientId": "f6b46326-9ed3-431d-a257-91b1f701e501"
+  "clientName": "Тарская ЦРБ"
 }
 
 ###
-GET http://localhost:8080/tenders/getTender?tenderId=a2c02b95-4559-4fe0-89ed-0504b4b0a81e
+GET http://localhost:8080/tenders/getTender?tenderNumber=125
 
 ###
 POST http://localhost:8080/tenders/addTender
 Content-Type: application/json
 
 {
-  "clientId": "f6b46326-9ed3-431d-a257-91b1f701e501",
-  "tenderNumber": "124",
-  "tenderDate": "01.10.2020",
-  "tenderItems": [
-    {
-      "productId": "ca8fd323-0710-47b4-95c9-a06b7f49a83d",
-      "quantity": 5,
-      "costPerUnit": 156.75
-    },
-    {
-      "productId": "aacb42a5-f2f0-4980-8145-e9bb67983ae3",
-      "quantity": 10,
-      "costPerUnit": 15.80
-    }
-  ]
+  "clientName": "Тарская ЦРБ",
+  "tenderNumber": "127",
+  "tenderDate": "01.11.2020"
 }
 
 ###
@@ -60,9 +48,12 @@ PUT http://localhost:8080/tenders/updateTender
 Content-Type: application/json
 
 {
-  "tenderId": "4ae329b1-feb4-43c7-ad4f-52d14c229a8e",
-  "clientId": "f6b46326-9ed3-431d-a257-91b1f701e501",
-  "tenderDate": "01.10.2021"
+  "clientName": "Тарская ЦРБ",
+  "tenderNumber": "127",
+  "updatableData": {
+    "tenderNumberNew": "127",
+    "tenderDateNew": "01.10.2020"
+  }
 }
 
 ###
@@ -70,7 +61,8 @@ DELETE http://localhost:8080/tenders/deleteTender
 Content-Type: application/json
 
 {
-  "tenderId": "4ae329b1-feb4-43c7-ad4f-52d14c229a8e"
+  "clientName": "Тарская ЦРБ",
+  "tenderNumber": "126"
 }
 
 

@@ -4,11 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class DeleteTenderRqDto {
-    private UUID tenderId;
+public class GetTendersRqDto {
+    private String clientName;
 }

@@ -3,8 +3,8 @@ package com.github.dmtest.tender.controller;
 import com.github.dmtest.tender.domain.Client;
 import com.github.dmtest.tender.domain.Tender;
 import com.github.dmtest.tender.dto.rq.tender.AddTenderRqDto;
-import com.github.dmtest.tender.dto.rq.tender.DeleteTenderRqDto;
-import com.github.dmtest.tender.dto.rq.tender.GetTendersByClientIdRqDto;
+import com.github.dmtest.tender.dto.rq.tender.GetTenderRqDto;
+import com.github.dmtest.tender.dto.rq.tender.GetTendersRqDto;
 import com.github.dmtest.tender.dto.rq.tender.UpdateTenderRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.dto.rs.body.GetTenderRsDto;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,75 +34,81 @@ public class TenderController {
         this.tendersRepo = tendersRepo;
     }
 
-    @PostMapping("getTendersByClientId")
-    public OperationResultRsDto getTendersByClientId(@RequestBody GetTendersByClientIdRqDto getTendersByClientIdRqDto) {
-        UUID clientId = getTendersByClientIdRqDto.getClientId();
+    @PostMapping("getTenders")
+    public OperationResultRsDto getTenders(@RequestBody GetTendersRqDto tendersRqDto) {
+        String clientName = tendersRqDto.getClientName();
         List<Tender> tenders;
-        if (clientId == null) {
+        if (clientName == null) {
             tenders = tendersRepo.findAll();
         } else {
-            Client client = clientsRepo.findById(clientId)
-                    .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с id '%s' не найден", clientId)));
+            Client client = clientsRepo.findByClientName(clientName)
+                    .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с именем '%s' не найден", clientName)));
             tenders = client.getTenders();
         }
         List<GetTenderRsDto> getTenderRsDtoList = tenders.stream()
-                .map(tn -> new GetTenderRsDto(tn.getTenderId(), tn.getTenderNumber(), tn.getTenderDate(), tn.getClient().getClientName()))
+                .map(tn -> new GetTenderRsDto(tn.getTenderNumber(), tn.getTenderDate(), tn.getClient().getClientName()))
                 .collect(Collectors.toList());
-        LOG.info("Получен список тендеров клиента с clientId '{}'", clientId);
+        LOG.info("Получен список тендеров клиента '{}'", clientName);
         return new OperationResultRsDto(OperationResult.SUCCESS, getTenderRsDtoList);
     }
 
     @GetMapping("getTender")
-    public OperationResultRsDto getTender(@RequestParam("tenderId") UUID tenderId) {
-        Tender tender = tendersRepo.findById(tenderId)
-                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с id '%s' не найден", tenderId)));
-        String tenderNumber = tender.getTenderNumber();
+    public OperationResultRsDto getTender(@RequestParam("tenderNumber") String tenderNumber) {
+        Tender tender = tendersRepo.findByTenderNumber(tenderNumber)
+                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с номером '%s' не найден", tenderNumber)));
         LocalDate tenderDate = tender.getTenderDate();
         String clientName = tender.getClient().getClientName();
-        GetTenderRsDto getTenderRsDto = new GetTenderRsDto(tenderId, tenderNumber, tenderDate, clientName);
+        GetTenderRsDto getTenderRsDto = new GetTenderRsDto(tenderNumber, tenderDate, clientName);
         LOG.info("Получена информация по тендеру '{}'", tender);
         return new OperationResultRsDto(OperationResult.SUCCESS, getTenderRsDto);
     }
 
     @PostMapping("addTender")
     public OperationResultRsDto addTender(@RequestBody AddTenderRqDto addTenderRqDto) {
-        UUID clientId = addTenderRqDto.getClientId();
+        String clientName = addTenderRqDto.getClientName();
         String tenderNumber = addTenderRqDto.getTenderNumber();
         LocalDate tenderDate = addTenderRqDto.getTenderDate();
-        Tender tender = new Tender(tenderNumber, tenderDate);
-        Client client = clientsRepo.findById(clientId)
-                .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с id '%s' не найден", clientId)));
+        Client client = clientsRepo.findByClientName(clientName)
+                .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с именем '%s' не найден", clientName)));
+        Tender tender = new Tender(tenderNumber, tenderDate, client);
         client.addTender(tender);
         clientsRepo.save(client);
         LOG.info("Тендер добавлен: {}", tender);
-        String msg = String.format("Тендер с номером '%s' добавлен клиенту '%s'", tenderNumber, client.getClientName());
+        String msg = String.format("Тендер с номером '%s' добавлен клиенту '%s'", tenderNumber, clientName);
         return new OperationResultRsDto(OperationResult.SUCCESS, msg);
     }
 
     @PutMapping("updateTender")
     public OperationResultRsDto updateTender(@RequestBody UpdateTenderRqDto updateTenderRqDto) {
-        UUID tenderId = updateTenderRqDto.getTenderId();
-        UUID clientId = updateTenderRqDto.getClientId();
-        LocalDate tenderDate = updateTenderRqDto.getTenderDate();
-        Tender tender = tendersRepo.findById(tenderId)
-                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с id '%s' не найден", tenderId)));
-        Client client = clientsRepo.findById(clientId)
-                .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с id '%s' не найден", clientId)));
-        tender.setClient(client);
-        tender.setTenderDate(tenderDate);
-        tendersRepo.save(tender);
-        LOG.info("Тендер обновлен: {}", tender);
+        String clientName = updateTenderRqDto.getClientName();
+        String tenderNumber = updateTenderRqDto.getTenderNumber();
+        Client client = clientsRepo.findByClientName(clientName)
+                .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с именем '%s' не найден", clientName)));
+        Tender tender = client.getTender(tenderNumber)
+                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с номером '%s' у клиента '%s' не найден", tenderNumber, clientName)));
+        LocalDate tenderDate = tender.getTenderDate();
+        String tenderNumberNew = updateTenderRqDto.getUpdatableData().getTenderNumberNew();
+        LocalDate tenderDateNew = updateTenderRqDto.getUpdatableData().getTenderDateNew();
+        tender.setTenderNumber(tenderNumberNew);
+        tender.setTenderDate(tenderDateNew);
+        clientsRepo.save(client);
+        LOG.info("Тендер с номером '{}' обновлен. Номер тендера: '{}' -> '{}', Дата тендера: '{}' -> '{}'", tenderNumber, tenderNumber, tenderNumberNew, tenderDate, tenderDateNew);
         return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Тендер '%s' успешно обновлен", tender.getTenderNumber()));
     }
 
     @DeleteMapping("deleteTender")
-    public OperationResultRsDto deleteTender(@RequestBody DeleteTenderRqDto deleteTenderRqDto) {
-        UUID tenderId = deleteTenderRqDto.getTenderId();
-        Tender tender = tendersRepo.findById(tenderId)
-                .orElseThrow(() -> new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с id '%s' не найден", tenderId)));
-        tendersRepo.delete(tender);
-        LOG.info("Тендер удален: {}", tender);
-        return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Тендер '%s' успешно удален", tender.getTenderNumber()));
+    public OperationResultRsDto deleteTender(@RequestBody GetTenderRqDto getTenderRqDto) {
+        String clientName = getTenderRqDto.getClientName();
+        String tenderNumber = getTenderRqDto.getTenderNumber();
+        Client client = clientsRepo.findByClientName(clientName)
+                .orElseThrow(() -> new BusinessException(OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с именем '%s' не найден", clientName)));
+        boolean result = client.removeTender(tenderNumber);
+        if (!result) {
+            throw new BusinessException(OperationResult.TENDER_NOT_FOUND, String.format("Тендер с номером '%s' у клиента '%s' не найден", tenderNumber, clientName));
+        }
+        clientsRepo.save(client);
+        LOG.info("Тендер с номером '{}' удален у клиента '{}'", tenderNumber, clientName);
+        return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Тендер '%s' успешно удален", tenderNumber));
     }
 
 }

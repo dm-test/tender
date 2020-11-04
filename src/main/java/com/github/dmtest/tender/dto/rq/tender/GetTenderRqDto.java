@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class GetTendersByClientIdRqDto {
-    private UUID clientId;
+public class GetTenderRqDto {
+    private String clientName;
+    private String tenderNumber;
 }

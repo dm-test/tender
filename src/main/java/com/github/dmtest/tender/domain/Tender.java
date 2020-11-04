@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-@ToString
+@ToString(of = "tenderNumber")
 @Entity
 @Table(name = "tenders")
 public class Tender {
@@ -22,27 +22,27 @@ public class Tender {
     @Type(type="uuid-char")
     private UUID tenderId;
 
+    @Setter
     private String tenderNumber;
 
     @Setter
     private LocalDate tenderDate;
 
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
 //    @JsonBackReference
     private Client client;
 
-    @ToString.Exclude
     @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<TenderItem> items = new ArrayList<>();
 
     protected Tender() {
     }
 
-    public Tender(String tenderNumber, LocalDate tenderDate) {
+    public Tender(String tenderNumber, LocalDate tenderDate, Client client) {
         this.tenderNumber = tenderNumber;
         this.tenderDate = tenderDate;
+        this.client = client;
     }
 
     public void addItem(TenderItem item) {
