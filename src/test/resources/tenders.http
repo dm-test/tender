@@ -1,16 +1,14 @@
 ###
-GET http://localhost:8080/tenders/getTender?tenderNumber=125
+GET http://localhost:8080/tenders/getAllTenders
 
 ###
-POST http://localhost:8080/tenders/getTenders
-Content-Type: application/json
-
-{
-  "clientName": "Тарская ЦРБ"
-}
+GET http://localhost:8080/tenders/getClientTenders?clientName=Тарская ЦРБ
 
 ###
-POST http://localhost:8080/tenders/addTender
+GET http://localhost:8080/tenders/getClientTender?clientName=Тарская ЦРБ&tenderNumber=125
+
+###
+POST http://localhost:8080/tenders/addClientTender
 Content-Type: application/json
 
 {
@@ -20,7 +18,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8080/tenders/updateTender
+PUT http://localhost:8080/tenders/updateClientTender
 Content-Type: application/json
 
 {
@@ -33,12 +31,12 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/tenders/removeTender
+DELETE http://localhost:8080/tenders/removeClientTender
 Content-Type: application/json
 
 {
   "clientName": "Тарская ЦРБ",
-  "tenderNumber": "126"
+  "tenderNumber": "127"
 }
 
 

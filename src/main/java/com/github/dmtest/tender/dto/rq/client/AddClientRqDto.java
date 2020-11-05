@@ -1,4 +1,4 @@
-package com.github.dmtest.tender.dto.rq;
+package com.github.dmtest.tender.dto.rq.client;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ClientRqDto {
+public class AddClientRqDto {
     private String clientName;
 
 }

@@ -1,14 +1,13 @@
 package com.github.dmtest.tender.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.Set;
 import java.util.UUID;
 
-@Getter
+@ToString(of = "productName")
 @Entity
 @Table(name = "products")
 public class Product {
@@ -17,13 +16,14 @@ public class Product {
     @Type(type="uuid-char")
     private UUID productId;
 
+    @Getter
     private String productName;
-    private String manufacturer;
-    private String country;
 
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//    @JsonManagedReference
-//    private Set<TenderItem> tenderContents;
+    @Getter
+    private String manufacturer;
+
+    @Getter
+    private String country;
 
     protected Product() {
     }

@@ -1,6 +1,5 @@
 package com.github.dmtest.tender.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,8 +9,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@ToString
-@Getter
+@ToString(of = "product")
 @Entity
 @Table(name = "tender_items")
 public class TenderItem {
@@ -20,20 +18,22 @@ public class TenderItem {
     @Type(type="uuid-char")
     private UUID itemId;
 
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tender_id")
-//    @JsonBackReference
     private Tender tender;
 
+    @Getter
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-//    @JsonBackReference
     private Product product;
 
+    @Getter
     @Setter
     private Integer quantity;
 
+    @Getter
     @Setter
     private BigDecimal costPerUnit;
 

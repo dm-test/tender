@@ -1,16 +1,13 @@
 package com.github.dmtest.tender.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
-@Getter
+@ToString(of = "clientName")
 @Entity
 @Table(name = "clients")
 public class Client {
@@ -19,10 +16,10 @@ public class Client {
     @Type(type="uuid-char")
     private UUID clientId;
 
+    @Getter
     private String clientName;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
     private final List<Tender> tenders = new ArrayList<>();
 
     protected Client() {
@@ -32,16 +29,20 @@ public class Client {
         this.clientName = clientName;
     }
 
-    public void addTender(Tender tender) {
-        tenders.add(tender);
+    public List<Tender> getTenders() {
+        return Collections.unmodifiableList(tenders);
     }
 
     public Optional<Tender> getTender(String tenderNumber) {
         return tenders.stream().filter(tender -> tender.getTenderNumber().equals(tenderNumber)).findFirst();
     }
 
-    public boolean removeTender(String tenderNumber) {
-        return tenders.removeIf(tender -> tender.getTenderNumber().equals(tenderNumber));
+    public void addTender(Tender tender) {
+        tenders.add(tender);
+    }
+
+    public void removeTender(Tender tender) {
+        tenders.remove(tender);
     }
 
 }
