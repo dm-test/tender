@@ -2,6 +2,9 @@
 GET http://localhost:8080/products/getProducts
 
 ###
+GET http://localhost:8080/products/getProductDetails?productName=Диаскинтест
+
+###
 POST http://localhost:8080/products/addProduct
 Content-Type: application/json
 
@@ -29,5 +32,5 @@ DELETE http://localhost:8080/products/removeProduct
 Content-Type: application/json
 
 {
-  "productName": "Диаскинтест-актив"
+  "productName": "Диаскинтест"
 }

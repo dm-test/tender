@@ -21,14 +21,19 @@ public class Client {
     @Setter
     private String clientName;
 
+    @Getter
+    @Setter
+    private String clientAddress;
+
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Tender> tenders = new ArrayList<>();
 
     protected Client() {
     }
 
-    public Client(String clientName) {
+    public Client(String clientName, String clientAddress) {
         this.clientName = clientName;
+        this.clientAddress = clientAddress;
     }
 
     public List<Tender> getTenders() {

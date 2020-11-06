@@ -16,6 +16,7 @@ public class UpdateClientRqDto {
     @NoArgsConstructor
     public static class UpdatableData {
         private String clientNameNew;
+        private String clientAddressNew;
     }
 
 }

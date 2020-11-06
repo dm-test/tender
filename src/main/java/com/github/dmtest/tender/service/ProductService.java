@@ -5,7 +5,8 @@ import com.github.dmtest.tender.dto.rq.product.AddProductRqDto;
 import com.github.dmtest.tender.dto.rq.product.RemoveProductRqDto;
 import com.github.dmtest.tender.dto.rq.product.UpdateProductRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
-import com.github.dmtest.tender.dto.rs.body.GetProductRsDto;
+import com.github.dmtest.tender.dto.rs.body.product.GetProductDetailsRsDto;
+import com.github.dmtest.tender.dto.rs.body.product.GetProductRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.exception.BusinessException;
 import com.github.dmtest.tender.repo.ProductsRepo;
@@ -28,11 +29,21 @@ public class ProductService {
     }
 
     public OperationResultRsDto getProducts() {
-        List<GetProductRsDto> products = productsRepo.findAll().stream()
-                .map(pr -> new GetProductRsDto(pr.getProductName(), pr.getManufacturer(), pr.getCountry()))
+        List<String> productNames = productsRepo.findAll().stream()
+                .map(Product::getProductName)
                 .collect(Collectors.toList());
+        GetProductRsDto getProductRsDto = new GetProductRsDto(productNames);
         LOG.info("Получен список продуктов");
-        return new OperationResultRsDto(OperationResult.SUCCESS, products);
+        return new OperationResultRsDto(OperationResult.SUCCESS, getProductRsDto);
+    }
+
+    public OperationResultRsDto getProductDetails(String productName) {
+        Product product = getProductByProductName(productName);
+        String manufacturer = product.getManufacturer();
+        String country = product.getCountry();
+        GetProductDetailsRsDto getProductDetailsRsDto = new GetProductDetailsRsDto(productName, manufacturer, country);
+        LOG.info("Получена информация по продукту '{}'", product);
+        return new OperationResultRsDto(OperationResult.SUCCESS, getProductDetailsRsDto);
     }
 
     public OperationResultRsDto addProduct(AddProductRqDto addProductRqDto) {

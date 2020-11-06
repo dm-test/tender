@@ -9,5 +9,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddClientRqDto {
     private String clientName;
-
+    private String clientAddress;
 }

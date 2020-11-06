@@ -9,8 +9,9 @@ import com.github.dmtest.tender.dto.rq.tender.AddTenderRqDto;
 import com.github.dmtest.tender.dto.rq.tender.RemoveTenderRqDto;
 import com.github.dmtest.tender.dto.rq.tender.UpdateTenderRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
-import com.github.dmtest.tender.dto.rs.body.GetClientRsDto;
+import com.github.dmtest.tender.dto.rs.body.client.GetClientDetailsRsDto;
 import com.github.dmtest.tender.dto.rs.body.GetTenderRsDto;
+import com.github.dmtest.tender.dto.rs.body.client.GetClientsRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.exception.BusinessException;
 import com.github.dmtest.tender.repo.ClientsRepo;
@@ -34,16 +35,26 @@ public class ClientService {
     }
 
     public OperationResultRsDto getClients() {
-        List<GetClientRsDto> clients = clientsRepo.findAll().stream()
-                .map(client -> new GetClientRsDto(client.getClientName()))
+        List<String> clientNames = clientsRepo.findAll().stream()
+                .map(Client::getClientName)
                 .collect(Collectors.toList());
+        GetClientsRsDto getClientsRsDto = new GetClientsRsDto(clientNames);
         LOG.info("Получен список клиентов");
-        return new OperationResultRsDto(OperationResult.SUCCESS, clients);
+        return new OperationResultRsDto(OperationResult.SUCCESS, getClientsRsDto);
+    }
+
+    public OperationResultRsDto getClientDetails(String clientName) {
+        Client client = getClientByClientName(clientName);
+        String clientAddress = client.getClientAddress();
+        GetClientDetailsRsDto getClientDetailsRsDto = new GetClientDetailsRsDto(clientName, clientAddress);
+        LOG.info("Получена информация по клиенту '{}'", client);
+        return new OperationResultRsDto(OperationResult.SUCCESS, getClientDetailsRsDto);
     }
 
     public OperationResultRsDto addClient(AddClientRqDto addClientRqDto) {
         String clientName = addClientRqDto.getClientName();
-        Client client = new Client(clientName);
+        String clientAddress = addClientRqDto.getClientAddress();
+        Client client = new Client(clientName, clientAddress);
         clientsRepo.save(client);
         String msg = String.format("Клиент с именем '%s' добавлен", clientName);
         LOG.info(msg);
@@ -53,10 +64,14 @@ public class ClientService {
     public OperationResultRsDto updateClient(UpdateClientRqDto updateClientRqDto) {
         String clientName = updateClientRqDto.getClientName();
         Client client = getClientByClientName(clientName);
+        String clientAddress = client.getClientAddress();
         String clientNameNew = updateClientRqDto.getUpdatableData().getClientNameNew();
+        String clientAddressNew = updateClientRqDto.getUpdatableData().getClientAddressNew();
         client.setClientName(clientNameNew);
+        client.setClientAddress(clientAddressNew);
         clientsRepo.save(client);
-        LOG.info("Клиент с именем '{}' обновлен. Имя клиента: '{}' -> '{}'", clientName, clientName, clientNameNew);
+        LOG.info("Клиент с именем '{}' обновлен. Имя клиента: '{}' -> '{}', Адрес клиента: '{}' -> '{}'",
+                clientName, clientName, clientNameNew, clientAddress, clientAddressNew);
         return new OperationResultRsDto(OperationResult.SUCCESS, "Клиент успешно обновлен");
     }
 

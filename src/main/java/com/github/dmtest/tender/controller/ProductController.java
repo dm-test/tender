@@ -23,6 +23,11 @@ public class ProductController {
         return productService.getProducts();
     }
 
+    @GetMapping("getProductDetails")
+    public OperationResultRsDto getProductDetails(@RequestParam("productName") String productName) {
+        return productService.getProductDetails(productName);
+    }
+
     @PostMapping("addProduct")
     public OperationResultRsDto addProduct(@RequestBody AddProductRqDto addProductRqDto) {
         return productService.addProduct(addProductRqDto);

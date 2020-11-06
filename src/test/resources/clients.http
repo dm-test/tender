@@ -2,11 +2,15 @@
 GET http://localhost:8080/clients/getClients
 
 ###
+GET http://localhost:8080/clients/getClientDetails?clientName=Тарская ЦРБ
+
+###
 POST http://localhost:8080/clients/addClient
 Content-Type: application/json
 
 {
-  "clientName": "Тарская ЦРБ"
+  "clientName": "Тарская ЦРБ",
+  "clientAddress": "г. Тара, ул. Мира, 146"
 }
 
 ###
@@ -16,7 +20,8 @@ Content-Type: application/json
 {
   "clientName": "Тарская ЦРБ",
   "updatableData": {
-    "clientNameNew": "БУЗОО Тарская ЦРБ"
+    "clientNameNew": "БУЗОО Тарская ЦРБ",
+    "clientAddressNew": "г. Тара, ул. Мира, 148"
   }
 }
 

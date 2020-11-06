@@ -23,6 +23,11 @@ public class ClientController {
         return clientService.getClients();
     }
 
+    @GetMapping("getClientDetails")
+    public OperationResultRsDto getClientDetails(@RequestParam("clientName") String clientName) {
+        return clientService.getClientDetails(clientName);
+    }
+
     @PostMapping("addClient")
     public OperationResultRsDto addClient(@RequestBody AddClientRqDto addClientRqDto) {
         return clientService.addClient(addClientRqDto);
