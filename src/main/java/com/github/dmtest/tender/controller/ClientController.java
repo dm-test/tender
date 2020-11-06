@@ -1,6 +1,8 @@
 package com.github.dmtest.tender.controller;
 
 import com.github.dmtest.tender.dto.rq.client.AddClientRqDto;
+import com.github.dmtest.tender.dto.rq.client.RemoveClientRqDto;
+import com.github.dmtest.tender.dto.rq.client.UpdateClientRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +26,15 @@ public class ClientController {
     @PostMapping("addClient")
     public OperationResultRsDto addClient(@RequestBody AddClientRqDto addClientRqDto) {
         return clientService.addClient(addClientRqDto);
+    }
+
+    @PutMapping("updateClient")
+    public OperationResultRsDto updateClient(@RequestBody UpdateClientRqDto updateClientRqDto) {
+        return clientService.updateClient(updateClientRqDto);
+    }
+
+    @DeleteMapping("removeClient")
+    public OperationResultRsDto removeClient(@RequestBody RemoveClientRqDto removeClientRqDto) {
+        return clientService.removeClient(removeClientRqDto);
     }
 }

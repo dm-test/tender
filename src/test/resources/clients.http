@@ -8,3 +8,22 @@ Content-Type: application/json
 {
   "clientName": "Тарская ЦРБ"
 }
+
+###
+PUT http://localhost:8080/clients/updateClient
+Content-Type: application/json
+
+{
+  "clientName": "Тарская ЦРБ",
+  "updatableData": {
+    "clientNameNew": "БУЗОО Тарская ЦРБ"
+  }
+}
+
+###
+DELETE http://localhost:8080/clients/removeClient
+Content-Type: application/json
+
+{
+  "clientName": "Тарская ЦРБ"
+}

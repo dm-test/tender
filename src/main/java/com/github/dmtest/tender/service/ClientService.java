@@ -3,6 +3,8 @@ package com.github.dmtest.tender.service;
 import com.github.dmtest.tender.domain.Client;
 import com.github.dmtest.tender.domain.Tender;
 import com.github.dmtest.tender.dto.rq.client.AddClientRqDto;
+import com.github.dmtest.tender.dto.rq.client.RemoveClientRqDto;
+import com.github.dmtest.tender.dto.rq.client.UpdateClientRqDto;
 import com.github.dmtest.tender.dto.rq.tender.AddTenderRqDto;
 import com.github.dmtest.tender.dto.rq.tender.RemoveTenderRqDto;
 import com.github.dmtest.tender.dto.rq.tender.UpdateTenderRqDto;
@@ -46,6 +48,24 @@ public class ClientService {
         String msg = String.format("Клиент с именем '%s' добавлен", clientName);
         LOG.info(msg);
         return new OperationResultRsDto(OperationResult.SUCCESS, msg);
+    }
+
+    public OperationResultRsDto updateClient(UpdateClientRqDto updateClientRqDto) {
+        String clientName = updateClientRqDto.getClientName();
+        Client client = getClientByClientName(clientName);
+        String clientNameNew = updateClientRqDto.getUpdatableData().getClientNameNew();
+        client.setClientName(clientNameNew);
+        clientsRepo.save(client);
+        LOG.info("Клиент с именем '{}' обновлен. Имя клиента: '{}' -> '{}'", clientName, clientName, clientNameNew);
+        return new OperationResultRsDto(OperationResult.SUCCESS, "Клиент успешно обновлен");
+    }
+
+    public OperationResultRsDto removeClient(RemoveClientRqDto removeClientRqDto) {
+        String clientName = removeClientRqDto.getClientName();
+        Client client = getClientByClientName(clientName);
+        clientsRepo.delete(client);
+        LOG.info("Клиент '{}' удален", client);
+        return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Клиент '%s' успешно удален", clientName));
     }
 
     public OperationResultRsDto getClientTenders(String clientName) {

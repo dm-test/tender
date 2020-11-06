@@ -10,3 +10,24 @@ Content-Type: application/json
   "manufacturer": "ООО Биосинтез",
   "country": "Россия"
 }
+
+###
+PUT http://localhost:8080/products/updateProduct
+Content-Type: application/json
+
+{
+  "productName": "Диаскинтест1",
+  "updatableData": {
+    "productNameNew": "Диаскинтест-актив",
+    "manufacturerNew": "LEK LTD",
+    "countryNew": "Словения"
+  }
+}
+
+###
+DELETE http://localhost:8080/products/removeProduct
+Content-Type: application/json
+
+{
+  "productName": "Диаскинтест-актив"
+}

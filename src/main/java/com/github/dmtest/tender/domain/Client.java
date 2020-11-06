@@ -1,6 +1,7 @@
 package com.github.dmtest.tender.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 
@@ -17,6 +18,7 @@ public class Client {
     private UUID clientId;
 
     @Getter
+    @Setter
     private String clientName;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)

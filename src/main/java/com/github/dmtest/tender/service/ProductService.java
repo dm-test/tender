@@ -2,8 +2,10 @@ package com.github.dmtest.tender.service;
 
 import com.github.dmtest.tender.domain.Product;
 import com.github.dmtest.tender.dto.rq.product.AddProductRqDto;
+import com.github.dmtest.tender.dto.rq.product.RemoveProductRqDto;
+import com.github.dmtest.tender.dto.rq.product.UpdateProductRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
-import com.github.dmtest.tender.dto.rs.body.ProductRsDto;
+import com.github.dmtest.tender.dto.rs.body.GetProductRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.exception.BusinessException;
 import com.github.dmtest.tender.repo.ProductsRepo;
@@ -26,8 +28,8 @@ public class ProductService {
     }
 
     public OperationResultRsDto getProducts() {
-        List<ProductRsDto> products = productsRepo.findAll().stream()
-                .map(pr -> new ProductRsDto(pr.getProductName(), pr.getManufacturer(), pr.getCountry()))
+        List<GetProductRsDto> products = productsRepo.findAll().stream()
+                .map(pr -> new GetProductRsDto(pr.getProductName(), pr.getManufacturer(), pr.getCountry()))
                 .collect(Collectors.toList());
         LOG.info("Получен список продуктов");
         return new OperationResultRsDto(OperationResult.SUCCESS, products);
@@ -42,6 +44,31 @@ public class ProductService {
         String msg = String.format("Продукт с именем '%s' добавлен", productName);
         LOG.info(msg);
         return new OperationResultRsDto(OperationResult.SUCCESS, msg);
+    }
+
+    public OperationResultRsDto updateProduct(UpdateProductRqDto updateProductRqDto) {
+        String productName = updateProductRqDto.getProductName();
+        Product product = getProductByProductName(productName);
+        String manufacturer = product.getManufacturer();
+        String country = product.getCountry();
+        String productNameNew = updateProductRqDto.getUpdatableData().getProductNameNew();
+        String manufacturerNew = updateProductRqDto.getUpdatableData().getManufacturerNew();
+        String countryNew = updateProductRqDto.getUpdatableData().getCountryNew();
+        product.setProductName(productNameNew);
+        product.setManufacturer(manufacturerNew);
+        product.setCountry(countryNew);
+        productsRepo.save(product);
+        LOG.info("Продукт с именем '{}' обновлен. Имя продукта: '{}' -> '{}', Производитель: '{}' -> '{}', Страна: '{}' -> '{}'",
+                productName, productName, productNameNew, manufacturer, manufacturerNew, country, countryNew);
+        return new OperationResultRsDto(OperationResult.SUCCESS, "Продукт успешно обновлен");
+    }
+
+    public OperationResultRsDto removeProduct(RemoveProductRqDto removeProductRqDto) {
+        String productName = removeProductRqDto.getProductName();
+        Product product = getProductByProductName(productName);
+        productsRepo.delete(product);
+        LOG.info("Продукт '{}' удален", product);
+        return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Продукт '%s' успешно удален", productName));
     }
 
     public Product getProductByProductName(String productName) {
