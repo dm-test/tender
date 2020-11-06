@@ -29,12 +29,11 @@ public class ProductService {
     }
 
     public OperationResultRsDto getProducts() {
-        List<String> productNames = productsRepo.findAll().stream()
-                .map(Product::getProductName)
+        List<GetProductRsDto> getProductRsDtoList = productsRepo.findAll().stream()
+                .map(product -> new GetProductRsDto(product.getProductName()))
                 .collect(Collectors.toList());
-        GetProductRsDto getProductRsDto = new GetProductRsDto(productNames);
         LOG.info("Получен список продуктов");
-        return new OperationResultRsDto(OperationResult.SUCCESS, getProductRsDto);
+        return new OperationResultRsDto(OperationResult.SUCCESS, getProductRsDtoList);
     }
 
     public OperationResultRsDto getProductDetails(String productName) {

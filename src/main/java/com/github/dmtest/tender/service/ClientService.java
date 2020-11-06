@@ -11,7 +11,7 @@ import com.github.dmtest.tender.dto.rq.tender.UpdateTenderRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.dto.rs.body.client.GetClientDetailsRsDto;
 import com.github.dmtest.tender.dto.rs.body.GetTenderRsDto;
-import com.github.dmtest.tender.dto.rs.body.client.GetClientsRsDto;
+import com.github.dmtest.tender.dto.rs.body.client.GetClientRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.exception.BusinessException;
 import com.github.dmtest.tender.repo.ClientsRepo;
@@ -35,12 +35,11 @@ public class ClientService {
     }
 
     public OperationResultRsDto getClients() {
-        List<String> clientNames = clientsRepo.findAll().stream()
-                .map(Client::getClientName)
+        List<GetClientRsDto> getClientRsDtoList = clientsRepo.findAll().stream()
+                .map(client -> new GetClientRsDto(client.getClientName()))
                 .collect(Collectors.toList());
-        GetClientsRsDto getClientsRsDto = new GetClientsRsDto(clientNames);
         LOG.info("Получен список клиентов");
-        return new OperationResultRsDto(OperationResult.SUCCESS, getClientsRsDto);
+        return new OperationResultRsDto(OperationResult.SUCCESS, getClientRsDtoList);
     }
 
     public OperationResultRsDto getClientDetails(String clientName) {
