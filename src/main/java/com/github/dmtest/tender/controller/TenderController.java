@@ -31,10 +31,10 @@ public class TenderController {
         return clientService.getClientTenders(clientName);
     }
 
-    @GetMapping("getClientTender")
-    public OperationResultRsDto getClientTender(@RequestParam("clientName") String clientName,
+    @GetMapping("getClientTenderDetails")
+    public OperationResultRsDto getClientTenderDetails(@RequestParam("clientName") String clientName,
                                                 @RequestParam("tenderNumber") String tenderNumber) {
-        return clientService.getClientTender(clientName, tenderNumber);
+        return clientService.getClientTenderDetails(clientName, tenderNumber);
     }
 
     @PostMapping("addClientTender")

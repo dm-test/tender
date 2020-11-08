@@ -91,7 +91,7 @@ public class ClientService {
         return new OperationResultRsDto(OperationResult.SUCCESS, getTenderRsDtoList);
     }
 
-    public OperationResultRsDto getClientTender(String clientName, String tenderNumber) {
+    public OperationResultRsDto getClientTenderDetails(String clientName, String tenderNumber) {
         Client client = getClientByClientName(clientName);
         Tender tender = getClientTenderByTenderNumber(client, tenderNumber);
         LocalDate tenderDate = tender.getTenderDate();

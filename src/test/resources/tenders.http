@@ -5,7 +5,7 @@ GET http://localhost:8080/tenders/getAllTenders
 GET http://localhost:8080/tenders/getClientTenders?clientName=Тарская ЦРБ
 
 ###
-GET http://localhost:8080/tenders/getClientTender?clientName=Тарская ЦРБ&tenderNumber=125
+GET http://localhost:8080/tenders/getClientTenderDetails?clientName=Тарская ЦРБ&tenderNumber=125
 
 ###
 POST http://localhost:8080/tenders/addClientTender
