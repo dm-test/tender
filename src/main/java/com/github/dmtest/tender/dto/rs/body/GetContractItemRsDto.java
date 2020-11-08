@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Getter
 @AllArgsConstructor
-public class GetTenderItemRsDto {
+public class GetContractItemRsDto {
     private final String productName;
     private final Integer quantity;
     private final BigDecimal costPerUnit;

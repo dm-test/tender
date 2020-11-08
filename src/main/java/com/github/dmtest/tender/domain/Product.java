@@ -20,7 +20,7 @@ public class Product {
     private UUID productId;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<TenderItem> items = new ArrayList<>();
+    private final List<ContractItem> items = new ArrayList<>();
 
     @Getter
     @Setter

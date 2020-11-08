@@ -9,53 +9,53 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.*;
 
-@ToString(of = "tenderNumber")
+@ToString(of = "contractNumber")
 @Entity
-@Table(name = "tenders")
-public class Tender {
+@Table(name = "contracts")
+public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type="uuid-char")
-    private UUID tenderId;
+    private UUID contractId;
 
     @Getter
     @Setter
-    private String tenderNumber;
+    private String contractNumber;
 
     @Getter
     @Setter
-    private LocalDate tenderDate;
+    private LocalDate contractDate;
 
     @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "tender", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<TenderItem> items = new ArrayList<>();
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<ContractItem> items = new ArrayList<>();
 
-    protected Tender() {
+    protected Contract() {
     }
 
-    public Tender(String tenderNumber, LocalDate tenderDate, Client client) {
-        this.tenderNumber = tenderNumber;
-        this.tenderDate = tenderDate;
+    public Contract(String contractNumber, LocalDate contractDate, Client client) {
+        this.contractNumber = contractNumber;
+        this.contractDate = contractDate;
         this.client = client;
     }
 
-    public List<TenderItem> getItems() {
+    public List<ContractItem> getItems() {
         return Collections.unmodifiableList(items);
     }
 
-    public Optional<TenderItem> getItem(String productName) {
+    public Optional<ContractItem> getItem(String productName) {
         return items.stream().filter(item -> item.getProduct().getProductName().equals(productName)).findFirst();
     }
 
-    public void addItem(TenderItem item) {
+    public void addItem(ContractItem item) {
         items.add(item);
     }
 
-    public void removeItem(TenderItem item) {
+    public void removeItem(ContractItem item) {
         items.remove(item);
     }
 }

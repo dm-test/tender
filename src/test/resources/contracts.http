@@ -1,0 +1,42 @@
+###
+GET http://localhost:8080/contracts/getAllContracts
+
+###
+GET http://localhost:8080/contracts/getClientContracts?clientName=Тарская ЦРБ
+
+###
+GET http://localhost:8080/contracts/getClientContractDetails?clientName=Тарская ЦРБ&contractNumber=127
+
+###
+POST http://localhost:8080/contracts/addClientContract
+Content-Type: application/json
+
+{
+  "clientName": "Тарская ЦРБ",
+  "contractNumber": "127",
+  "contractDate": "01.11.2020"
+}
+
+###
+PUT http://localhost:8080/contracts/updateClientContract
+Content-Type: application/json
+
+{
+  "clientName": "Тарская ЦРБ",
+  "contractNumber": "127",
+  "updatableData": {
+    "contractNumberNew": "127",
+    "contractDateNew": "01.10.2020"
+  }
+}
+
+###
+DELETE http://localhost:8080/contracts/removeClientContract
+Content-Type: application/json
+
+{
+  "clientName": "Тарская ЦРБ",
+  "contractNumber": "127"
+}
+
+

@@ -1,0 +1,38 @@
+###
+GET http://localhost:8080/contractItems/getContractItems?contractNumber=128
+
+###
+POST http://localhost:8080/contractItems/addContractItem
+Content-Type: application/json
+
+{
+  "contractNumber": "128",
+  "productName": "Диаскинтест",
+  "quantity": 5,
+  "costPerUnit": 50.87
+}
+
+###
+PUT http://localhost:8080/contractItems/updateContractItem
+Content-Type: application/json
+
+{
+  "contractNumber": "128",
+  "productName": "Диаскинтест",
+  "updatableData": {
+    "productNameNew": "Диаскинтест",
+    "quantityNew": 1,
+    "costPerUnitNew": 50.75
+  }
+}
+
+###
+DELETE http://localhost:8080/contractItems/removeContractItem
+Content-Type: application/json
+
+{
+  "contractNumber": "128",
+  "productName": "Диаскинтест"
+}
+
+

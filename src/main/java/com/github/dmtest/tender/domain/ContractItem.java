@@ -12,7 +12,7 @@ import java.util.UUID;
 @ToString(of = "product")
 @Entity
 @Table(name = "tender_items")
-public class TenderItem {
+public class ContractItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type="uuid-char")
@@ -20,8 +20,8 @@ public class TenderItem {
 
     @Getter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tender_id")
-    private Tender tender;
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
 
     @Getter
     @Setter
@@ -37,13 +37,13 @@ public class TenderItem {
     @Setter
     private BigDecimal costPerUnit;
 
-    protected TenderItem() {
+    protected ContractItem() {
     }
 
-    public TenderItem(Product product, Integer quantity, BigDecimal costPerUnit, Tender tender) {
+    public ContractItem(Product product, Integer quantity, BigDecimal costPerUnit, Contract contract) {
         this.product = product;
         this.quantity = quantity;
         this.costPerUnit = costPerUnit;
-        this.tender = tender;
+        this.contract = contract;
     }
 }

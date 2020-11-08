@@ -26,7 +26,7 @@ public class Client {
     private String clientAddress;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Tender> tenders = new ArrayList<>();
+    private final List<Contract> contracts = new ArrayList<>();
 
     protected Client() {
     }
@@ -36,20 +36,20 @@ public class Client {
         this.clientAddress = clientAddress;
     }
 
-    public List<Tender> getTenders() {
-        return Collections.unmodifiableList(tenders);
+    public List<Contract> getContracts() {
+        return Collections.unmodifiableList(contracts);
     }
 
-    public Optional<Tender> getTender(String tenderNumber) {
-        return tenders.stream().filter(tender -> tender.getTenderNumber().equals(tenderNumber)).findFirst();
+    public Optional<Contract> getContract(String tenderNumber) {
+        return contracts.stream().filter(contract -> contract.getContractNumber().equals(tenderNumber)).findFirst();
     }
 
-    public void addTender(Tender tender) {
-        tenders.add(tender);
+    public void addContract(Contract contract) {
+        contracts.add(contract);
     }
 
-    public void removeTender(Tender tender) {
-        tenders.remove(tender);
+    public void removeContract(Contract contract) {
+        contracts.remove(contract);
     }
 
 }

@@ -1,16 +1,16 @@
 package com.github.dmtest.tender.service;
 
 import com.github.dmtest.tender.domain.Client;
-import com.github.dmtest.tender.domain.Tender;
+import com.github.dmtest.tender.domain.Contract;
 import com.github.dmtest.tender.dto.rq.client.AddClientRqDto;
 import com.github.dmtest.tender.dto.rq.client.RemoveClientRqDto;
 import com.github.dmtest.tender.dto.rq.client.UpdateClientRqDto;
-import com.github.dmtest.tender.dto.rq.tender.AddTenderRqDto;
-import com.github.dmtest.tender.dto.rq.tender.RemoveTenderRqDto;
-import com.github.dmtest.tender.dto.rq.tender.UpdateTenderRqDto;
+import com.github.dmtest.tender.dto.rq.contract.AddClientContractRqDto;
+import com.github.dmtest.tender.dto.rq.contract.RemoveClientContractRqDto;
+import com.github.dmtest.tender.dto.rq.contract.UpdateClientContractRqDto;
 import com.github.dmtest.tender.dto.rs.OperationResultRsDto;
 import com.github.dmtest.tender.dto.rs.body.client.GetClientDetailsRsDto;
-import com.github.dmtest.tender.dto.rs.body.GetTenderRsDto;
+import com.github.dmtest.tender.dto.rs.body.GetClientContractRsDto;
 import com.github.dmtest.tender.dto.rs.body.client.GetClientRsDto;
 import com.github.dmtest.tender.enums.OperationResult;
 import com.github.dmtest.tender.exception.BusinessException;
@@ -82,62 +82,62 @@ public class ClientService {
         return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Клиент '%s' успешно удален", clientName));
     }
 
-    public OperationResultRsDto getClientTenders(String clientName) {
+    public OperationResultRsDto getClientContracts(String clientName) {
         Client client = getClientByClientName(clientName);
-        List<GetTenderRsDto> getTenderRsDtoList = client.getTenders().stream()
-                .map(tn -> new GetTenderRsDto(tn.getTenderNumber(), tn.getTenderDate(), tn.getClient().getClientName()))
+        List<GetClientContractRsDto> getClientContractRsDtoList = client.getContracts().stream()
+                .map(c -> new GetClientContractRsDto(c.getContractNumber(), c.getContractDate(), c.getClient().getClientName()))
                 .collect(Collectors.toList());
-        LOG.info("Получен список тендеров клиента '{}'", client);
-        return new OperationResultRsDto(OperationResult.SUCCESS, getTenderRsDtoList);
+        LOG.info("Получен список контрактов с клиентом '{}'", client);
+        return new OperationResultRsDto(OperationResult.SUCCESS, getClientContractRsDtoList);
     }
 
-    public OperationResultRsDto getClientTenderDetails(String clientName, String tenderNumber) {
+    public OperationResultRsDto getClientContractDetails(String clientName, String contractNumber) {
         Client client = getClientByClientName(clientName);
-        Tender tender = getClientTenderByTenderNumber(client, tenderNumber);
-        LocalDate tenderDate = tender.getTenderDate();
-        GetTenderRsDto getTenderRsDto = new GetTenderRsDto(tenderNumber, tenderDate, clientName);
-        LOG.info("Получена информация по тендеру '{}'", tender);
-        return new OperationResultRsDto(OperationResult.SUCCESS, getTenderRsDto);
+        Contract contract = getClientContractByContractNumber(client, contractNumber);
+        LocalDate contractDate = contract.getContractDate();
+        GetClientContractRsDto getClientContractRsDto = new GetClientContractRsDto(contractNumber, contractDate, clientName);
+        LOG.info("Получена информация по контракту '{}'", contract);
+        return new OperationResultRsDto(OperationResult.SUCCESS, getClientContractRsDto);
     }
 
-    public OperationResultRsDto addClientTender(AddTenderRqDto addTenderRqDto) {
-        String clientName = addTenderRqDto.getClientName();
-        String tenderNumber = addTenderRqDto.getTenderNumber();
-        LocalDate tenderDate = addTenderRqDto.getTenderDate();
+    public OperationResultRsDto addClientContract(AddClientContractRqDto addClientContractRqDto) {
+        String clientName = addClientContractRqDto.getClientName();
+        String contractNumber = addClientContractRqDto.getContractNumber();
+        LocalDate contractDate = addClientContractRqDto.getContractDate();
         Client client = getClientByClientName(clientName);
-        Tender tender = new Tender(tenderNumber, tenderDate, client);
-        client.addTender(tender);
+        Contract contract = new Contract(contractNumber, contractDate, client);
+        client.addContract(contract);
         clientsRepo.save(client);
-        LOG.info("Тендер '{}' добавлен клиенту '{}'", tender, client);
-        String msg = String.format("Тендер с номером '%s' добавлен клиенту '%s'", tenderNumber, clientName);
+        LOG.info("Контракт '{}' добавлен клиенту '{}'", contract, client);
+        String msg = String.format("Контракт с номером '%s' добавлен клиенту '%s'", contractNumber, clientName);
         return new OperationResultRsDto(OperationResult.SUCCESS, msg);
     }
 
-    public OperationResultRsDto updateClientTender(UpdateTenderRqDto updateTenderRqDto) {
-        String clientName = updateTenderRqDto.getClientName();
-        String tenderNumber = updateTenderRqDto.getTenderNumber();
+    public OperationResultRsDto updateClientContract(UpdateClientContractRqDto updateClientContractRqDto) {
+        String clientName = updateClientContractRqDto.getClientName();
+        String contractNumber = updateClientContractRqDto.getContractNumber();
         Client client = getClientByClientName(clientName);
-        Tender tender = getClientTenderByTenderNumber(client, tenderNumber);
-        LocalDate tenderDate = tender.getTenderDate();
-        String tenderNumberNew = updateTenderRqDto.getUpdatableData().getTenderNumberNew();
-        LocalDate tenderDateNew = updateTenderRqDto.getUpdatableData().getTenderDateNew();
-        tender.setTenderNumber(tenderNumberNew);
-        tender.setTenderDate(tenderDateNew);
+        Contract contract = getClientContractByContractNumber(client, contractNumber);
+        LocalDate contractDate = contract.getContractDate();
+        String contractNumberNew = updateClientContractRqDto.getUpdatableData().getContractNumberNew();
+        LocalDate contractDateNew = updateClientContractRqDto.getUpdatableData().getContractDateNew();
+        contract.setContractNumber(contractNumberNew);
+        contract.setContractDate(contractDateNew);
         clientsRepo.save(client);
-        LOG.info("Тендер с номером '{}' обновлен. Номер тендера: '{}' -> '{}', Дата тендера: '{}' -> '{}'",
-                tenderNumber, tenderNumber, tenderNumberNew, tenderDate, tenderDateNew);
-        return new OperationResultRsDto(OperationResult.SUCCESS, "Тендер успешно обновлен");
+        LOG.info("Контракт с номером '{}' обновлен. Номер контракта: '{}' -> '{}', Дата контракта: '{}' -> '{}'",
+                contractNumber, contractNumber, contractNumberNew, contractDate, contractDateNew);
+        return new OperationResultRsDto(OperationResult.SUCCESS, "Контракт успешно обновлен");
     }
 
-    public OperationResultRsDto removeClientTender(RemoveTenderRqDto removeTenderRqDto) {
-        String clientName = removeTenderRqDto.getClientName();
-        String tenderNumber = removeTenderRqDto.getTenderNumber();
+    public OperationResultRsDto removeClientContract(RemoveClientContractRqDto removeClientContractRqDto) {
+        String clientName = removeClientContractRqDto.getClientName();
+        String contractNumber = removeClientContractRqDto.getContractNumber();
         Client client = getClientByClientName(clientName);
-        Tender tender = getClientTenderByTenderNumber(client, tenderNumber);
-        client.removeTender(tender);
+        Contract contract = getClientContractByContractNumber(client, contractNumber);
+        client.removeContract(contract);
         clientsRepo.save(client);
-        LOG.info("Тендер '{}' удален у клиента '{}'", tender, client);
-        return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Тендер '%s' успешно удален", tenderNumber));
+        LOG.info("Контракт '{}' удален у клиента '{}'", contract, client);
+        return new OperationResultRsDto(OperationResult.SUCCESS, String.format("Контракт '%s' успешно удален", contractNumber));
     }
 
     private Client getClientByClientName(String clientName) {
@@ -146,10 +146,10 @@ public class ClientService {
                         OperationResult.CLIENT_NOT_FOUND, String.format("Клиент с именем '%s' не найден", clientName)));
     }
 
-    private Tender getClientTenderByTenderNumber(Client client, String tenderNumber) {
-        return client.getTender(tenderNumber).orElseThrow(() -> new BusinessException(
-                OperationResult.TENDER_NOT_FOUND, String.format(
-                        "Тендер с номером '%s' у клиента '%s' не найден", tenderNumber, client.getClientName())));
+    private Contract getClientContractByContractNumber(Client client, String contractNumber) {
+        return client.getContract(contractNumber).orElseThrow(() -> new BusinessException(
+                OperationResult.CONTRACT_NOT_FOUND, String.format(
+                        "Контракт с номером '%s' у клиента '%s' не найден", contractNumber, client.getClientName())));
     }
 
 }

@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateTenderItemRqDto {
-    private String tenderNumber;
+public class UpdateContractItemRqDto {
+    private String contractNumber;
     private String productName;
     private UpdatableData updatableData;
 

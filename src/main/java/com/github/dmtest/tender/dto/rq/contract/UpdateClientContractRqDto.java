@@ -1,4 +1,4 @@
-package com.github.dmtest.tender.dto.rq.tender;
+package com.github.dmtest.tender.dto.rq.contract;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
@@ -10,17 +10,17 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateTenderRqDto {
+public class UpdateClientContractRqDto {
     private String clientName;
-    private String tenderNumber;
+    private String contractNumber;
     private UpdatableData updatableData;
 
     @Getter
     @Setter
     @NoArgsConstructor
     public static class UpdatableData {
-        private String tenderNumberNew;
+        private String contractNumberNew;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-        private LocalDate tenderDateNew;
+        private LocalDate contractDateNew;
     }
 }

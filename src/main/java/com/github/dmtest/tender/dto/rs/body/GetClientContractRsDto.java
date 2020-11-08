@@ -8,9 +8,9 @@ import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
-public class GetTenderRsDto {
-    private final String tenderNumber;
+public class GetClientContractRsDto {
+    private final String contractNumber;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-    private final LocalDate tenderDate;
+    private final LocalDate contractDate;
     private final String clientName;
 }
